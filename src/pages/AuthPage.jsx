@@ -5,6 +5,7 @@ export default function AuthPage() {
     const [loading, setLoading] = useState(true);
     const [userExists, setUserExists] = useState(false);
     const [isTelegram, setIsTelegram] = useState(false);
+    const [user, setUser] = useState({});
 
     useEffect(() => {
         // Check if the Telegram object exists on the window
@@ -20,6 +21,7 @@ export default function AuthPage() {
         setIsTelegram(true);
 
         const tgUser = tg.initDataUnsafe.user;
+        setUser(tgUser);
         if (!tgUser) {
             alert("Unable to retrieve user data from Telegram.");
             setLoading(false);
@@ -84,7 +86,7 @@ export default function AuthPage() {
     return (
         <div className="p-4 text-center">
             {userExists ? (
-                <h1>Welcome back! ✅</h1>
+                <h1>Welcome back! ✅ {user.first_name || "Name"}</h1>
             ) : (
                 <h1>Registration complete! 🎉</h1>
             )}
