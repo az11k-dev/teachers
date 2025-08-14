@@ -2,7 +2,7 @@ import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import Link from 'next/link';
 
 export default async function SchoolsPage({params}) {
-    const {regionId, districtId} = params;
+    const {regionId, districtId} = await params;
     const supabase = createSupabaseBrowserClient();
 
     const {data: schools, error} = await supabase

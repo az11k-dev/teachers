@@ -2,7 +2,7 @@ import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import Link from 'next/link';
 
 export default async function VacanciesPage({params}) {
-    const {schoolId} = params;
+    const {schoolId} = await params;
     const supabase = createSupabaseBrowserClient();
 
     const {data: vacancies, error} = await supabase
