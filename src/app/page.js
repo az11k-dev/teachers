@@ -18,6 +18,16 @@ export default async function Home() {
 
     return (
         <div className="container mx-auto p-4">
+            <button onClick={() => {
+                router.push('/register');
+            }}>
+                GO BACK!
+            </button>
+            <button onClick={() => {
+                router.push('/admin');
+            }}>
+                GO BAAdCK!
+            </button>
             <h1 className="text-3xl font-bold mb-6 text-center">Выберите регион</h1>
             <ul className="space-y-4">
                 {regions.map((region) => (
