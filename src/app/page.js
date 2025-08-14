@@ -18,10 +18,6 @@ export default async function Home() {
 
     return (
         <div className="container mx-auto p-4">
-            <Link href={`/register`}
-                  className="block p-5 text-lg font-medium text-indigo-600 hover:text-indigo-800">
-                Register
-            </Link>
             <h1 className="text-3xl font-bold mb-6 text-center">Выберите регион</h1>
             <ul className="space-y-4">
                 {regions.map((region) => (

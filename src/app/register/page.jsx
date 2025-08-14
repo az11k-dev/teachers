@@ -4,6 +4,18 @@ import {useState, useEffect} from 'react';
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import {useRouter} from 'next/navigation';
 
+// Эмуляция Telegram Web App SDK.
+// В реальном приложении вы получите window.Telegram.WebApp.initDataUnsafe
+const telegramWebApp = {
+    initDataUnsafe: {
+        user: {
+            id: 123456789,
+            first_name: 'Test',
+            last_name: 'User',
+        },
+    },
+};
+
 export default function Register() {
     const router = useRouter();
     const [firstName, setFirstName] = useState('');
