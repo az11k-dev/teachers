@@ -1,7 +1,8 @@
-import { supabase } from '../utils/supabaseClient';
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import Link from 'next/link';
 
 export default async function HomePage() {
+  const supabase = createSupabaseBrowserClient();
   const { data: regions, error } = await supabase
     .from('regions')
     .select('id, name');
