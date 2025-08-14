@@ -2,8 +2,10 @@
 
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation'; // Импортируем useRouter
 
 export default async function Home() {
+    const router = useRouter(); // Инициализируем роутер
     const supabase = createSupabaseBrowserClient();
     const {data: regions, error} = await supabase
         .from('regions')
