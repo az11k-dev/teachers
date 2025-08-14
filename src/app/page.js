@@ -1,31 +1,39 @@
-"use client";
-import { useState, useEffect } from "react";
+import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
+import Link from 'next/link';
 
-export default function Home() {
-    const [userId, setUserId] = useState(null);
-    const [error, setError] = useState(null);
+export default async function Home() {
+    const supabase = createSupabaseBrowserClient();
+    const {data: regions, error} = await supabase
+        .from('regions')
+        .select('id, name');
 
-    useEffect(() => {
-        try {
-            if (typeof window !== "undefined" && window.Telegram?.WebApp) {
-                const tg = window.Telegram.WebApp;
-                tg.ready();
-                const user = tg.initDataUnsafe?.user;
-                if (user?.id) {
-                    setUserId(user.id);
-                } else {
-                    setError("No user data found — are you in Telegram Mini App?");
-                }
-            } else {
-                setError("Telegram WebApp API not available.");
-            }
-        } catch (err) {
-            setError("Error: " + err.message);
-        }
-    }, []);
+    if (error) {
+        console.error('Error fetching regions:', error);
+        return <div className="text-center mt-8">Не удалось загрузить регионы.</div>;
+    }
 
-    if (error) return <p>{error}</p>;
-    if (!userId) return <p>Loading...</p>;
+    if (!regions || regions.length === 0) {
+        return <div className="text-center mt-8">Регионы не найдены.</div>;
+    }
 
-    return <p>User ID: {userId}</p>;
+    return (
+        <div className="container mx-auto p-4">
+            <Link href={`/register`}
+                  className="block p-5 text-lg font-medium text-indigo-600 hover:text-indigo-800">
+                Register
+            </Link>
+            <h1 className="text-3xl font-bold mb-6 text-center">Выберите регион</h1>
+            <ul className="space-y-4">
+                {regions.map((region) => (
+                    <li key={region.id}
+                        className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+                        <Link href={`/${region.id}`}
+                              className="block p-5 text-lg font-medium text-indigo-600 hover:text-indigo-800">
+                            {region.name}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }
