@@ -1,38 +1,35 @@
-"use client";
-import { useEffect, useState } from "react";
+import { supabase } from '../utils/supabaseClient';
+import Link from 'next/link';
 
-export default function Page() {
-  const [status, setStatus] = useState("⏳ Checking...");
-  const [userId, setUserId] = useState(null);
+export default async function HomePage() {
+  const { data: regions, error } = await supabase
+    .from('regions')
+    .select('id, name');
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  if (error) {
+    console.error('Error fetching regions:', error);
+    return <div className="text-center mt-8">Не удалось загрузить регионы.</div>;
+  }
 
-    if (!window.Telegram) {
-      setStatus("❌ Telegram API not loaded");
-      return;
-    }
-
-    if (!window.Telegram.WebApp) {
-      setStatus("⚠️ Not in Telegram WebApp");
-      return;
-    }
-
-    window.Telegram.WebApp.ready();
-
-    const user = window.Telegram.WebApp.initDataUnsafe?.user;
-    if (user?.id) {
-      setUserId(user.id);
-      setStatus("✅ Data received");
-    } else {
-      setStatus("❌ No initData from Telegram");
-    }
-  }, []);
+  if (!regions || regions.length === 0) {
+    return <div className="text-center mt-8">Регионы не найдены.</div>;
+  }
 
   return (
-    <div style={{ fontFamily: "sans-serif", padding: "20px", fontSize: "18px" }}>
-      <p>Status: {status}</p>
-      {userId && <p>User ID: {userId}</p>}
+    <div className="container mx-auto p-4">
+      <Link href={`/register`} className="block p-5 text-lg font-medium text-indigo-600 hover:text-indigo-800">
+         Текст
+      </Link>
+      <h1 className="text-3xl font-bold mb-6 text-center">Выберите регион</h1>
+      <ul className="space-y-4">
+        {regions.map((region) => (
+          <li key={region.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+            <Link href={`/${region.id}`} className="block p-5 text-lg font-medium text-indigo-600 hover:text-indigo-800">
+              {region.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-      }
+}
