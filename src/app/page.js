@@ -1,11 +1,7 @@
-'use client'
-
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'; // Импортируем useRouter
 
 export default async function Home() {
-    const router = useRouter(); // Инициализируем роутер
     const supabase = createSupabaseBrowserClient();
     const {data: regions, error} = await supabase
         .from('regions')
@@ -22,16 +18,6 @@ export default async function Home() {
 
     return (
         <div className="container mx-auto p-4">
-            <button onClick={() => {
-                router.push('/register');
-            }}>
-                GO BACK!
-            </button>
-            <button onClick={() => {
-                router.push('/admin');
-            }}>
-                GO BAAdCK!
-            </button>
             <h1 className="text-3xl font-bold mb-6 text-center">Выберите регион</h1>
             <ul className="space-y-4">
                 {regions.map((region) => (

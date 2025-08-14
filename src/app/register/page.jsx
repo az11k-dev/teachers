@@ -4,80 +4,61 @@ import {useState, useEffect} from 'react';
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import {useRouter} from 'next/navigation';
 
+// Эмуляция Telegram Web App SDK.
+// В реальном приложении вы получите window.Telegram.WebApp.initDataUnsafe
+const telegramWebApp = {
+    initDataUnsafe: {
+        user: {
+            id: 123456789,
+            first_name: 'Test',
+            last_name: 'User',
+        },
+    },
+};
+
 export default function Register() {
     const router = useRouter();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isLoading, setIsLoading] = useState(true);
-    const [telegramUser, setTelegramUser] = useState(null);
     const supabase = createSupabaseBrowserClient();
 
     useEffect(() => {
-        // Эта асинхронная функция будет выполнять всю логику
-        async function initAndCheckUser() {
-            try {
-                const tg = window.Telegram?.WebApp;
-                const data = tg?.initDataUnsafe?.user;
+        async function checkUser() {
+            if (!telegramWebApp.initDataUnsafe.user) {
+                console.error('Telegram Web App user data is not available.');
+                setIsLoading(false);
+                return;
+            }
 
-                if (!data) {
-                    console.error('Telegram Web App user data is not available.');
-                    setIsLoading(false);
-                    return;
-                }
+            const {user} = telegramWebApp.initDataUnsafe;
+            const {data} = await supabase
+                .from('users')
+                .select('id')
+                .eq('telegram_id', user.id)
+                .single();
 
-                const user = {
-                    id: data.id,
-                    first_name: data.first_name,
-                    username: data.username,
-                    last_name: data.last_name,
-                };
-
-                // Сохраняем данные пользователя в состоянии
-                setTelegramUser(user);
-                // Заполняем поля формы данными из Telegram
-                setFirstName(user.first_name || '');
-                setLastName(user.last_name || '');
-
-                // Проверяем, зарегистрирован ли пользователь
-                const {data: existingUser} = await supabase
-                    .from('users')
-                    .select('id')
-                    .eq('telegram_id', user.id)
-                    .single();
-
-                if (existingUser) {
-                    // Если пользователь уже есть, перенаправляем на главную
-                    router.push('/');
-                } else {
-                    // Если нет, отображаем форму
-                    setIsLoading(false);
-                }
-            } catch (err) {
-                console.error('Ошибка проверки пользователя:', err);
+            if (data) {
+                router.push('/');
+            } else {
                 setIsLoading(false);
             }
         }
 
-        initAndCheckUser();
-    }, [router, supabase]);
+        checkUser();
+    }, [router]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
 
-        if (!telegramUser) {
-            console.error('Telegram user data not found during submission.');
-            setIsLoading(false);
-            return;
-        }
-
-        // Вставляем нового пользователя в базу данных
+        const {user} = telegramWebApp.initDataUnsafe;
         const {error} = await supabase
             .from('users')
             .insert([
                 {
-                    telegram_id: telegramUser.id,
+                    telegram_id: user.id,
                     first_name: firstName,
                     last_name: lastName,
                     phone_number: phoneNumber,
