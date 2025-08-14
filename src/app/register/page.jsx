@@ -1,72 +1,87 @@
 'use client';
 
-import {useState, useEffect} from 'react';
-import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
-import {useRouter} from 'next/navigation';
-
-// Эмуляция Telegram Web App SDK.
-// В реальном приложении вы получите window.Telegram.WebApp.initDataUnsafe
-const telegramWebApp = {
-    initDataUnsafe: {
-        user: {
-            id: 123456789,
-            first_name: 'Test',
-            last_name: 'User',
-        },
-    },
-};
+import { useState, useEffect } from 'react';
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser-client";
+import { useRouter } from 'next/navigation';
 
 export default function Register() {
     const router = useRouter();
+    const supabase = createSupabaseBrowserClient();
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isLoading, setIsLoading] = useState(true);
-    const supabase = createSupabaseBrowserClient();
+    const [telegramUser, setTelegramUser] = useState(null);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        async function checkUser() {
-            if (!telegramWebApp.initDataUnsafe.user) {
-                console.error('Telegram Web App user data is not available.');
+        async function initializeUser() {
+            if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
+                console.error("Telegram WebApp API not available.");
+                setError("Please open this page inside a Telegram Web App.");
                 setIsLoading(false);
                 return;
             }
 
-            const {user} = telegramWebApp.initDataUnsafe;
-            const {data} = await supabase
+            window.Telegram.WebApp.ready();
+            const user = window.Telegram.WebApp.initDataUnsafe?.user;
+
+            if (!user?.id) {
+                console.error('Telegram user data not found.');
+                setError("Could not retrieve user data from Telegram.");
+                setIsLoading(false);
+                return;
+            }
+            
+            setTelegramUser(user);
+            setFirstName(user.first_name || '');
+            setLastName(user.last_name || '');
+
+            const { data, error: fetchError } = await supabase
                 .from('users')
                 .select('id')
                 .eq('telegram_id', user.id)
                 .single();
 
             if (data) {
+                // User already exists, redirect to main page.
                 router.push('/');
+            } else if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 means "No rows found"
+                console.error('Error checking user:', fetchError.message);
+                setError('An error occurred. Please try again.');
+                setIsLoading(false);
             } else {
                 setIsLoading(false);
             }
         }
 
-        checkUser();
-    }, [router]);
+        initializeUser();
+    }, [router, supabase]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        setError(null);
 
-        const {user} = telegramWebApp.initDataUnsafe;
-        const {error} = await supabase
+        if (!telegramUser) {
+            setError('User data is missing. Please refresh the page.');
+            setIsLoading(false);
+            return;
+        }
+
+        const { error: insertError } = await supabase
             .from('users')
-            .insert([
-                {
-                    telegram_id: user.id,
-                    first_name: firstName,
-                    last_name: lastName,
-                    phone_number: phoneNumber,
-                },
-            ]);
+            .insert({
+                telegram_id: telegramUser.id,
+                first_name: firstName,
+                last_name: lastName,
+                phone_number: phoneNumber,
+            });
 
-        if (error) {
-            console.error('Error registering user:', error.message);
+        if (insertError) {
+            console.error('Error registering user:', insertError.message);
+            setError('Registration failed. Please try again.');
             setIsLoading(false);
         } else {
             router.push('/');
@@ -77,6 +92,14 @@ export default function Register() {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <p className="text-xl">Загрузка...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <p className="text-xl text-red-500">{error}</p>
             </div>
         );
     }
