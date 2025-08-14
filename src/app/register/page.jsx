@@ -10,54 +10,71 @@ export default function Register() {
     const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isLoading, setIsLoading] = useState(true);
-    const [telegramUser, setTelegramUser] = useState(null); // Состояние для хранения данных пользователя
+    const [telegramUser, setTelegramUser] = useState(null);
     const supabase = createSupabaseBrowserClient();
 
     useEffect(() => {
-        async function checkUser() {
-            // Проверяем, доступны ли данные Telegram Web App
-            if (typeof window !== 'undefined' && window.Telegram && window.Telegram.WebApp) {
-                const user = window.Telegram.WebApp.initDataUnsafe.user;
-                if (!user) {
+        // Эта асинхронная функция будет выполнять всю логику
+        async function initAndCheckUser() {
+            try {
+                // Мы удалили "await import(...)"
+                // Теперь мы можем сразу получить доступ к Telegram.WebApp
+                const tg = window.Telegram?.WebApp;
+                const data = tg?.initDataUnsafe?.user;
+
+                if (!data) {
                     console.error('Telegram Web App user data is not available.');
                     setIsLoading(false);
                     return;
                 }
-                setTelegramUser(user); // Сохраняем данные пользователя в состоянии
 
-                // Проверяем, существует ли пользователь в базе данных
-                const {data} = await supabase
+                const user = {
+                    id: data.id,
+                    first_name: data.first_name,
+                    username: data.username,
+                    last_name: data.last_name,
+                };
+
+                // Сохраняем данные пользователя в состоянии
+                setTelegramUser(user);
+                // Заполняем поля формы данными из Telegram
+                setFirstName(user.first_name || '');
+                setLastName(user.last_name || '');
+
+                // Проверяем, зарегистрирован ли пользователь
+                const {data: existingUser} = await supabase
                     .from('users')
                     .select('id')
                     .eq('telegram_id', user.id)
                     .single();
 
-                if (data) {
+                if (existingUser) {
+                    // Если пользователь уже есть, перенаправляем на главную
                     router.push('/');
                 } else {
+                    // Если нет, отображаем форму
                     setIsLoading(false);
                 }
-            } else {
-                console.error('Telegram Web App SDK is not available. Please open this page in a Telegram client.');
-                // Можно перенаправить пользователя или показать сообщение об ошибке
+            } catch (err) {
+                console.error('Ошибка проверки пользователя:', err);
                 setIsLoading(false);
             }
         }
 
-        checkUser();
-    }, [router]);
+        initAndCheckUser();
+    }, [router, supabase]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
 
-        // Используем данные пользователя из состояния
         if (!telegramUser) {
-            console.error('Telegram user data not found during registration.');
+            console.error('Telegram user data not found during submission.');
             setIsLoading(false);
             return;
         }
 
+        // Вставляем нового пользователя в базу данных
         const {error} = await supabase
             .from('users')
             .insert([
@@ -81,17 +98,6 @@ export default function Register() {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <p className="text-xl">Загрузка...</p>
-            </div>
-        );
-    }
-
-    // Если данные Telegram недоступны, можно показать пользователю сообщение об ошибке
-    if (!telegramUser) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <p className="text-xl text-red-500 text-center px-4">
-                    Не удалось загрузить данные пользователя. Пожалуйста, убедитесь, что вы открыли страницу в браузере Telegram.
-                </p>
             </div>
         );
     }

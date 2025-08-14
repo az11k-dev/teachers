@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.55.0",
+    "@telegram-apps/sdk": "^3.11.4",
     "install": "^0.13.0",
     "next": "15.4.6",
     "npm": "^11.5.2",
