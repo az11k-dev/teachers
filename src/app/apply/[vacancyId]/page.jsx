@@ -1,48 +1,47 @@
 'use client';
 
-import { useState, useEffect, use } from 'react'; // Import `use` from React
+import { useState, useEffect } from 'react';
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import { useRouter } from 'next/navigation';
 
 export default function ApplyPage({ params }) {
-    // Use `React.use()` to unwrap the params promise
-    const unwrappedParams = use(params);
-    const { vacancyId } = unwrappedParams;
+    const { vacancyId } = params;
 
     const router = useRouter();
+    const supabase = createSupabaseBrowserClient();
+
     const [user, setUser] = useState(null);
     const [feedback, setFeedback] = useState('');
     const [files, setFiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const supabase = createSupabaseBrowserClient();
-
-    // Эмуляция Telegram Web App SDK
-    const telegramWebApp = {
-        initDataUnsafe: {
-            user: {
-                id: 123456789,
-            },
-        },
-    };
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Your existing useEffect logic remains the same
         async function getUserData() {
-            if (!telegramWebApp.initDataUnsafe.user) {
-                console.error('Telegram user not found');
+            if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
+                console.error("Telegram WebApp API not available.");
+                setError("Пожалуйста, откройте эту страницу в приложении Telegram.");
+                setIsLoading(false);
+                return;
+            }
+
+            window.Telegram.WebApp.ready();
+            const telegramUser = window.Telegram.WebApp.initDataUnsafe?.user;
+
+            if (!telegramUser?.id) {
+                console.error('Telegram user data not found.');
                 router.push('/register');
                 return;
             }
 
-            const { user: telegramUser } = telegramWebApp.initDataUnsafe;
-            const { data, error } = await supabase
+            const { data, error: fetchError } = await supabase
                 .from('users')
                 .select('id, first_name, last_name, phone_number')
                 .eq('telegram_id', telegramUser.id)
                 .single();
 
-            if (error || !data) {
-                console.error('User not registered');
+            if (fetchError || !data) {
+                console.error('User not registered or an error occurred:', fetchError?.message);
                 router.push('/register');
             } else {
                 setUser(data);
@@ -51,7 +50,7 @@ export default function ApplyPage({ params }) {
         }
 
         getUserData();
-    }, [router]);
+    }, [router, supabase]);
 
     const handleFileChange = (e) => {
         setFiles(e.target.files);
@@ -60,9 +59,12 @@ export default function ApplyPage({ params }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        setError(null);
 
         if (!user) {
             console.error('User is not authenticated.');
+            setError('Ошибка: Пользователь не авторизован. Пожалуйста, обновите страницу.');
+            setIsLoading(false);
             return;
         }
 
@@ -76,6 +78,7 @@ export default function ApplyPage({ params }) {
 
                 if (uploadError) {
                     console.error('Error uploading file:', uploadError);
+                    setError(`Ошибка загрузки файла: ${uploadError.message}`);
                     setIsLoading(false);
                     return;
                 }
@@ -94,6 +97,7 @@ export default function ApplyPage({ params }) {
 
         if (insertError) {
             console.error('Error submitting application:', insertError);
+            setError(`Ошибка отправки заявки: ${insertError.message}`);
             setIsLoading(false);
         } else {
             alert('Ваша заявка успешно отправлена!');
@@ -101,7 +105,7 @@ export default function ApplyPage({ params }) {
         }
     };
 
-    if (isLoading || !user) {
+    if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <p className="text-xl">Загрузка...</p>
@@ -109,10 +113,18 @@ export default function ApplyPage({ params }) {
         );
     }
 
+    if (error) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <p className="text-xl text-red-500">{error}</p>
+            </div>
+        );
+    }
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-lg p-8 space-y-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold text-center">Подача заявки</h2>
+                <h2 className="text-2xl font-bold text-center">Подача заявки на вакансию: {vacancyId}</h2>
                 <div className="text-center">
                     <p>
                         **Имя:** {user.first_name} {user.last_name}
