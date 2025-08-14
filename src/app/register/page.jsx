@@ -17,8 +17,6 @@ export default function Register() {
         // Эта асинхронная функция будет выполнять всю логику
         async function initAndCheckUser() {
             try {
-                // Мы удалили "await import(...)"
-                // Теперь мы можем сразу получить доступ к Telegram.WebApp
                 const tg = window.Telegram?.WebApp;
                 const data = tg?.initDataUnsafe?.user;
 
