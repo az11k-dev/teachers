@@ -1,3 +1,5 @@
+'use client'
+
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import Link from 'next/link';
 
