@@ -21,7 +21,7 @@ export default async function HomePage() {
             <Link href={`/register`} className="block p-5 text-lg font-medium text-indigo-600 hover:text-indigo-800">
                 Register
             </Link>
-            <Link href={`/register`} className="block p-5 text-lg font-medium text-indigo-600 hover:text-indigo-800">
+            <Link href={`/admin`} className="block p-5 text-lg font-medium text-indigo-600 hover:text-indigo-800">
                 Admin
             </Link>
             <h1 className="text-3xl font-bold mb-6 text-center">Выберите регион</h1>
