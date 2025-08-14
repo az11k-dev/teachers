@@ -4,30 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5396cf71-fd3c-4a26-9c53-32726d463399" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/[schoolId]/page.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/page.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/[regionId]/page.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/admin/page.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/api/notify/route.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/apply/[vacancyId]/page.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/register/page.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/supabase/browser-client.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eslint.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/vite.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/supabaseClient.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/AuthPage.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/HomePage.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" />
-    </list>
+    <list default="true" id="5396cf71-fd3c-4a26-9c53-32726d463399" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -97,7 +74,7 @@
       <updated>1755077788488</updated>
       <workItem from="1755077790198" duration="7605000" />
       <workItem from="1755145659115" duration="5194000" />
-      <workItem from="1755179085846" duration="1282000" />
+      <workItem from="1755179085846" duration="1949000" />
     </task>
     <servers />
   </component>

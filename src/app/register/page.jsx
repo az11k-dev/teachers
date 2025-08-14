@@ -4,44 +4,42 @@ import {useState, useEffect} from 'react';
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import {useRouter} from 'next/navigation';
 
-// Эмуляция Telegram Web App SDK.
-// В реальном приложении вы получите window.Telegram.WebApp.initDataUnsafe
-const telegramWebApp = {
-    initDataUnsafe: {
-        user: {
-            id: 123456789,
-            first_name: 'Test',
-            last_name: 'User',
-        },
-    },
-};
-
 export default function Register() {
     const router = useRouter();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [telegramUser, setTelegramUser] = useState(null); // Состояние для хранения данных пользователя
     const supabase = createSupabaseBrowserClient();
 
     useEffect(() => {
         async function checkUser() {
-            if (!telegramWebApp.initDataUnsafe.user) {
-                console.error('Telegram Web App user data is not available.');
-                setIsLoading(false);
-                return;
-            }
+            // Проверяем, доступны ли данные Telegram Web App
+            if (typeof window !== 'undefined' && window.Telegram && window.Telegram.WebApp) {
+                const user = window.Telegram.WebApp.initDataUnsafe.user;
+                if (!user) {
+                    console.error('Telegram Web App user data is not available.');
+                    setIsLoading(false);
+                    return;
+                }
+                setTelegramUser(user); // Сохраняем данные пользователя в состоянии
 
-            const {user} = telegramWebApp.initDataUnsafe;
-            const {data} = await supabase
-                .from('users')
-                .select('id')
-                .eq('telegram_id', user.id)
-                .single();
+                // Проверяем, существует ли пользователь в базе данных
+                const {data} = await supabase
+                    .from('users')
+                    .select('id')
+                    .eq('telegram_id', user.id)
+                    .single();
 
-            if (data) {
-                router.push('/');
+                if (data) {
+                    router.push('/');
+                } else {
+                    setIsLoading(false);
+                }
             } else {
+                console.error('Telegram Web App SDK is not available. Please open this page in a Telegram client.');
+                // Можно перенаправить пользователя или показать сообщение об ошибке
                 setIsLoading(false);
             }
         }
@@ -53,12 +51,18 @@ export default function Register() {
         e.preventDefault();
         setIsLoading(true);
 
-        const {user} = telegramWebApp.initDataUnsafe;
+        // Используем данные пользователя из состояния
+        if (!telegramUser) {
+            console.error('Telegram user data not found during registration.');
+            setIsLoading(false);
+            return;
+        }
+
         const {error} = await supabase
             .from('users')
             .insert([
                 {
-                    telegram_id: user.id,
+                    telegram_id: telegramUser.id,
                     first_name: firstName,
                     last_name: lastName,
                     phone_number: phoneNumber,
@@ -77,6 +81,17 @@ export default function Register() {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <p className="text-xl">Загрузка...</p>
+            </div>
+        );
+    }
+
+    // Если данные Telegram недоступны, можно показать пользователю сообщение об ошибке
+    if (!telegramUser) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <p className="text-xl text-red-500 text-center px-4">
+                    Не удалось загрузить данные пользователя. Пожалуйста, убедитесь, что вы открыли страницу в браузере Telegram.
+                </p>
             </div>
         );
     }
