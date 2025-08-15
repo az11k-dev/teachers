@@ -87,6 +87,13 @@ export default function ApplyPage({params}) {
             return;
         }
 
+        // Добавляем эту проверку
+        if (files.length === 0) {
+            setError('Пожалуйста, выберите хотя бы один файл.');
+            setIsLoading(false);
+            return;
+        }
+
         const filePaths = [];
         for (const file of files) {
             const filePath = `applications/${user.id}/${vacancyId}/${file.name}`;
