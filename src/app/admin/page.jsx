@@ -4,6 +4,7 @@ import {useState, useEffect} from 'react';
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import {useRouter} from 'next/navigation';
 import {LuFile, LuDownload, LuEye, LuMessageSquare, LuMailOpen} from "react-icons/lu";
+import {BiCheck, BiXCircle} from "react-icons/bi";
 
 export default function AdminPage() {
     const router = useRouter();
@@ -145,11 +146,9 @@ export default function AdminPage() {
             case 'pending':
                 return <LuMailOpen className="inline-block mr-1"/>;
             case 'accepted':
-                return <p>file</p>;
+                return <BiCheck className="inline-block mr-1"/>;
             case 'rejected':
-                return <p>
-                    file
-                </p>;
+                return <BiXCircle className="inline-block mr-1"/>;
             default:
                 return null;
         }
@@ -225,7 +224,7 @@ export default function AdminPage() {
                                                 className="p-2 text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:bg-green-400"
                                                 disabled={app.status !== 'pending'}
                                             >
-                                                file
+                                                <BiCheck size={20}/>
                                             </button>
                                             <button
                                                 onClick={() => {
@@ -235,7 +234,7 @@ export default function AdminPage() {
                                                 className="p-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:bg-red-400"
                                                 disabled={app.status !== 'pending'}
                                             >
-                                                file
+                                                <BiXCircle size={20}/>
                                             </button>
                                         </div>
                                     </div>
