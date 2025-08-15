@@ -198,7 +198,7 @@ export default function AdminPage() {
                                     className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                                     <div className="mb-4 sm:mb-0">
                                         <h2 className="text-xl font-bold text-gray-900">
-                                            Заявка на: {app.vacancies.title || "Vakansiya nomi"}
+                                            Заявка на: {app?.vacancies?.title}
                                         </h2>
                                         <p className="text-sm text-gray-600 mt-1">
                                             <span
