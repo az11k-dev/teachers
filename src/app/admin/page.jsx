@@ -40,7 +40,7 @@ export default function AdminPage() {
             const {data: userData, error: userError} = await supabase
                 .from('users')
                 .select('id, role')
-                .eq('telegram_id', telegramUser.id)
+                .eq('telegram_id', telegramUser?.id)
                 .single();
 
             if (userError || userData.role !== 'admin') {
@@ -76,6 +76,7 @@ export default function AdminPage() {
             .from('applications')
             .select('*, users(first_name, last_name, phone_number, telegram_id), vacancies(title, school_id, schools(name))')
             .in('vacancies.school_id', schoolIds)
+            .not('vacancies', 'is', null) // Эта строка будет фильтровать все заявки с пустыми вакансиями
             .order('created_at', {ascending: false});
 
         if (error) {
