@@ -5,7 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5396cf71-fd3c-4a26-9c53-32726d463399" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/app/admin/AdminPanel.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ui/EmptyState.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ui/NavigationLinks.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/data/districts.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/data/regions.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/data/schools.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/data/vacancies.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/supabase/server-client.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/[schoolId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/[schoolId]/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/[regionId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[regionId]/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/admin/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/apply/[vacancyId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apply/[vacancyId]/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

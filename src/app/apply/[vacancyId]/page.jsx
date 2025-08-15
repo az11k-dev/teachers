@@ -1,25 +1,26 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { createSupabaseBrowserClient } from "@/lib/supabase/browser-client";
-import { useRouter } from 'next/navigation';
+import {useState, useEffect} from 'react';
+import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
+import {useRouter} from 'next/navigation';
+import EmptyState from "@/components/ui/EmptyState"; // Assuming you have this component
 
-export default function ApplyPage({ params }) {
-    const { vacancyId } = params;
+export default function ApplyPage({params}) {
+    const {vacancyId} = params;
 
     const router = useRouter();
     const supabase = createSupabaseBrowserClient();
 
     const [user, setUser] = useState(null);
+    const [vacancy, setVacancy] = useState(null);
     const [feedback, setFeedback] = useState('');
     const [files, setFiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        async function getUserData() {
+        const initializePage = async () => {
             if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
-                console.error("Telegram WebApp API not available.");
                 setError("Пожалуйста, откройте эту страницу в приложении Telegram.");
                 setIsLoading(false);
                 return;
@@ -29,28 +30,47 @@ export default function ApplyPage({ params }) {
             const telegramUser = window.Telegram.WebApp.initDataUnsafe?.user;
 
             if (!telegramUser?.id) {
-                console.error('Telegram user data not found.');
-                router.push('/register');
+                setError('Пользователь Telegram не найден.');
+                setIsLoading(false);
+                // Optionally redirect
+                // router.push('/register');
                 return;
             }
 
-            const { data, error: fetchError } = await supabase
+            // 1. Fetch user data
+            const {data: userData, error: userError} = await supabase
                 .from('users')
                 .select('id, first_name, last_name, phone_number')
                 .eq('telegram_id', telegramUser.id)
                 .single();
 
-            if (fetchError || !data) {
-                console.error('User not registered or an error occurred:', fetchError?.message);
-                router.push('/register');
-            } else {
-                setUser(data);
-                setIsLoading(false);
+            if (userError || !userData) {
+                setError('Пользователь не зарегистрирован. Перенаправление на страницу регистрации...');
+                // You might want to delay this to show the message first
+                setTimeout(() => router.push('/register'), 2000);
+                return;
             }
-        }
+            setUser(userData);
 
-        getUserData();
-    }, [router, supabase]);
+            // 2. Fetch vacancy data to display title
+            const {data: vacancyData, error: vacancyError} = await supabase
+                .from('vacancies')
+                .select('title')
+                .eq('id', vacancyId)
+                .single();
+
+            if (vacancyError || !vacancyData) {
+                setError('Не удалось загрузить данные о вакансии.');
+                setIsLoading(false);
+                return;
+            }
+            setVacancy(vacancyData);
+
+            setIsLoading(false);
+        };
+
+        initializePage();
+    }, [router, supabase, vacancyId]);
 
     const handleFileChange = (e) => {
         setFiles(e.target.files);
@@ -62,31 +82,27 @@ export default function ApplyPage({ params }) {
         setError(null);
 
         if (!user) {
-            console.error('User is not authenticated.');
-            setError('Ошибка: Пользователь не авторизован. Пожалуйста, обновите страницу.');
+            setError('Ошибка: Пользователь не авторизован.');
             setIsLoading(false);
             return;
         }
 
         const filePaths = [];
-        if (files.length > 0) {
-            for (const file of files) {
-                const filePath = `applications/${user.id}/${vacancyId}/${file.name}`;
-                const { error: uploadError } = await supabase.storage
-                    .from('application-documents')
-                    .upload(filePath, file);
+        for (const file of files) {
+            const filePath = `applications/${user.id}/${vacancyId}/${file.name}`;
+            const {error: uploadError} = await supabase.storage
+                .from('application-documents')
+                .upload(filePath, file);
 
-                if (uploadError) {
-                    console.error('Error uploading file:', uploadError);
-                    setError(`Ошибка загрузки файла: ${uploadError.message}`);
-                    setIsLoading(false);
-                    return;
-                }
-                filePaths.push(filePath);
+            if (uploadError) {
+                setError(`Ошибка загрузки файла: ${uploadError.message}`);
+                setIsLoading(false);
+                return;
             }
+            filePaths.push(filePath);
         }
 
-        const { error: insertError } = await supabase
+        const {error: insertError} = await supabase
             .from('applications')
             .insert({
                 vacancy_id: vacancyId,
@@ -96,13 +112,23 @@ export default function ApplyPage({ params }) {
             });
 
         if (insertError) {
-            console.error('Error submitting application:', insertError);
             setError(`Ошибка отправки заявки: ${insertError.message}`);
-            setIsLoading(false);
         } else {
+            // New Code: Sending notification to the admin
+            const notificationRes = await fetch('/api/notify-admin', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({vacancyId, userId: user.id}),
+            });
+
+            if (!notificationRes.ok) {
+                console.error('Error sending admin notification:', await notificationRes.text());
+            }
+
             alert('Ваша заявка успешно отправлена!');
             router.push(`/`);
         }
+        setIsLoading(false);
     };
 
     if (isLoading) {
@@ -114,23 +140,20 @@ export default function ApplyPage({ params }) {
     }
 
     if (error) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <p className="text-xl text-red-500">{error}</p>
-            </div>
-        );
+        return <EmptyState message={error}/>;
     }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-lg p-8 space-y-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold text-center">Подача заявки на вакансию: {vacancyId}</h2>
+                <h2 className="text-2xl font-bold text-center">Подача заявки на
+                    вакансию: {vacancy?.title || 'Неизвестно'}</h2>
                 <div className="text-center">
                     <p>
-                        **Имя:** {user.first_name} {user.last_name}
+                        Имя: {user.first_name} {user.last_name}
                     </p>
                     <p>
-                        **Телефон:** {user.phone_number}
+                        Телефон: {user.phone_number}
                     </p>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
