@@ -4,7 +4,6 @@ import {getVacancies} from "@/lib/data/vacancies";
 
 async function VacancyList({schoolId}) {
     try {
-        // Мы передаем schoolId уже в виде числа, так что здесь всё в порядке
         const vacancies = await getVacancies(schoolId);
 
         if (!vacancies || vacancies.length === 0) {
@@ -16,15 +15,15 @@ async function VacancyList({schoolId}) {
                 {vacancies.map((vacancy) => (
                     <li
                         key={vacancy.id}
-                        className="bg-white rounded-lg shadow-md p-5 flex justify-between items-center"
+                        className="group bg-white rounded-xl shadow-sm hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out p-5 flex justify-between items-center border border-gray-200"
                     >
                         <div>
-                            <h2 className="text-xl font-semibold">{vacancy.title}</h2>
-                            <p className="text-gray-600">{vacancy.rate}</p>
+                            <h2 className="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">Vakansiya: {vacancy.title}</h2>
+                            <p className="text-gray-500 font-medium">Stavka: {vacancy.rate}</p>
                         </div>
                         <Link
                             href={`/apply/${vacancy.id}`}
-                            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition-colors duration-200"
+                            className="px-5 ml-2 text-center py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
                             Подать заявку
                         </Link>
@@ -34,28 +33,26 @@ async function VacancyList({schoolId}) {
         );
     } catch (error) {
         console.error("Error in VacancyList component:", error);
-        // Обработка ошибки
         return <EmptyState message="Не удалось загрузить вакансии."/>;
     }
 }
 
 export default async function VacanciesPage({params}) {
     const {schoolId} = await params;
-
-    // 💡 Ключевое изменение: преобразуем schoolId в целое число.
     const schoolIdAsNumber = parseInt(schoolId, 10);
 
-    // Проверяем, является ли schoolId корректным числом.
-    // Если нет, возвращаем страницу с ошибкой.
     if (isNaN(schoolIdAsNumber)) {
         return <EmptyState message="Некорректный идентификатор школы."/>;
     }
 
     return (
-        <div className="container mx-auto p-4 max-w-lg">
-            <h1 className="text-3xl font-bold mb-6 text-center">Вакансии</h1>
-            {/* Передаем числовое значение в компонент */}
-            <VacancyList schoolId={schoolIdAsNumber}/>
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
+                <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-center tracking-tight">
+                    Вакансии
+                </h1>
+                <VacancyList schoolId={schoolIdAsNumber}/>
+            </div>
         </div>
     );
 }

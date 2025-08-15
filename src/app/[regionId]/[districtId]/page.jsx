@@ -15,13 +15,16 @@ async function SchoolList({regionId, districtId}) {
                 {schools.map((school) => (
                     <li
                         key={school.id}
-                        className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
+                        className="group"
                     >
                         <Link
                             href={`/${regionId}/${districtId}/${school.id}`}
-                            className="block p-5 text-lg font-medium text-indigo-600 hover:text-indigo-800"
+                            className="block p-5 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
                         >
-                            {school.name}
+                            <span
+                                className="text-lg font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors duration-300">
+                                {school.name}
+                            </span>
                         </Link>
                     </li>
                 ))}
@@ -36,9 +39,13 @@ async function SchoolList({regionId, districtId}) {
 export default async function SchoolsPage({params}) {
     const {regionId, districtId} = await params;
     return (
-        <div className="container mx-auto p-4 max-w-lg">
-            <h1 className="text-3xl font-bold mb-6 text-center">Выберите школу</h1>
-            <SchoolList regionId={regionId} districtId={districtId}/>
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
+                <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-center tracking-tight">
+                    Выберите школу
+                </h1>
+                <SchoolList regionId={regionId} districtId={districtId}/>
+            </div>
         </div>
     );
 }

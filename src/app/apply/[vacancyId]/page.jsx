@@ -3,7 +3,7 @@
 import {useState, useEffect} from 'react';
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import {useRouter} from 'next/navigation';
-import EmptyState from "@/components/ui/EmptyState"; // Assuming you have this component
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function ApplyPage({params}) {
     const {vacancyId} = params;
@@ -32,12 +32,9 @@ export default function ApplyPage({params}) {
             if (!telegramUser?.id) {
                 setError('Пользователь Telegram не найден.');
                 setIsLoading(false);
-                // Optionally redirect
-                // router.push('/register');
                 return;
             }
 
-            // 1. Fetch user data
             const {data: userData, error: userError} = await supabase
                 .from('users')
                 .select('id, first_name, last_name, phone_number')
@@ -46,13 +43,11 @@ export default function ApplyPage({params}) {
 
             if (userError || !userData) {
                 setError('Пользователь не зарегистрирован. Перенаправление на страницу регистрации...');
-                // You might want to delay this to show the message first
                 setTimeout(() => router.push('/register'), 2000);
                 return;
             }
             setUser(userData);
 
-            // 2. Fetch vacancy data to display title
             const {data: vacancyData, error: vacancyError} = await supabase
                 .from('vacancies')
                 .select('title')
@@ -87,7 +82,6 @@ export default function ApplyPage({params}) {
             return;
         }
 
-        // Добавляем эту проверку
         if (files.length === 0) {
             setError('Пожалуйста, выберите хотя бы один файл.');
             setIsLoading(false);
@@ -121,7 +115,6 @@ export default function ApplyPage({params}) {
         if (insertError) {
             setError(`Ошибка отправки заявки: ${insertError.message}`);
         } else {
-            // New Code: Sending notification to the admin
             const notificationRes = await fetch('/api/notify-admin', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -140,8 +133,8 @@ export default function ApplyPage({params}) {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <p className="text-xl">Загрузка...</p>
+            <div className="flex items-center justify-center min-h-screen bg-gray-50">
+                <p className="text-xl font-medium text-gray-700">Загрузка...</p>
             </div>
         );
     }
@@ -151,21 +144,30 @@ export default function ApplyPage({params}) {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-lg p-8 space-y-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold text-center">Подача заявки на
-                    вакансию: {vacancy?.title || 'Неизвестно'}</h2>
-                <div className="text-center">
-                    <p>
-                        Имя: {user.first_name} {user.last_name}
-                    </p>
-                    <p>
-                        Телефон: {user.phone_number}
-                    </p>
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
+                <h2 className="text-4xl font-extrabold text-gray-900 mb-2 text-center tracking-tight">
+                    Подача заявки
+                </h2>
+                <p className="text-xl text-center font-medium text-indigo-600 mb-8">
+                    на вакансию: {vacancy?.title || 'Неизвестно'}
+                </p>
+
+                <div className="bg-gray-50 p-4 rounded-xl mb-6 border border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Ваши данные:</h3>
+                    <div className="text-gray-700 space-y-1">
+                        <p>
+                            <span className="font-medium">Имя:</span> {user.first_name} {user.last_name}
+                        </p>
+                        <p>
+                            <span className="font-medium">Телефон:</span> {user.phone_number}
+                        </p>
+                    </div>
                 </div>
-                <form onSubmit={handleSubmit} className="space-y-4">
+
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label htmlFor="feedback" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-1">
                             Комментарий
                         </label>
                         <textarea
@@ -174,11 +176,11 @@ export default function ApplyPage({params}) {
                             rows="4"
                             value={feedback}
                             onChange={(e) => setFeedback(e.target.value)}
-                            className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
                         />
                     </div>
                     <div>
-                        <label htmlFor="files" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="files" className="block text-sm font-medium text-gray-700 mb-1">
                             Прикрепить документы
                         </label>
                         <input
@@ -187,13 +189,13 @@ export default function ApplyPage({params}) {
                             type="file"
                             multiple
                             onChange={handleFileChange}
-                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors"
                         />
                     </div>
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400"
+                        className="w-full px-4 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 transition-colors"
                     >
                         {isLoading ? 'Отправка...' : 'Отправить заявку'}
                     </button>

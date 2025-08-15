@@ -19,7 +19,7 @@ export default function Register() {
         async function initializeUser() {
             if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
                 console.error("Telegram WebApp API not available.");
-                setError("Please open this page inside a Telegram Web App.");
+                setError("Пожалуйста, откройте эту страницу в приложении Telegram.");
                 setIsLoading(false);
                 return;
             }
@@ -29,11 +29,11 @@ export default function Register() {
 
             if (!user?.id) {
                 console.error('Telegram user data not found.');
-                setError("Could not retrieve user data from Telegram.");
+                setError("Не удалось получить данные пользователя из Telegram.");
                 setIsLoading(false);
                 return;
             }
-            
+
             setTelegramUser(user);
             setFirstName(user.first_name || '');
             setLastName(user.last_name || '');
@@ -45,11 +45,10 @@ export default function Register() {
                 .single();
 
             if (data) {
-                // User already exists, redirect to main page.
                 router.push('/');
-            } else if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 means "No rows found"
+            } else if (fetchError && fetchError.code !== 'PGRST116') {
                 console.error('Error checking user:', fetchError.message);
-                setError('An error occurred. Please try again.');
+                setError('Произошла ошибка. Пожалуйста, попробуйте снова.');
                 setIsLoading(false);
             } else {
                 setIsLoading(false);
@@ -65,7 +64,7 @@ export default function Register() {
         setError(null);
 
         if (!telegramUser) {
-            setError('User data is missing. Please refresh the page.');
+            setError('Данные пользователя отсутствуют. Пожалуйста, обновите страницу.');
             setIsLoading(false);
             return;
         }
@@ -81,7 +80,7 @@ export default function Register() {
 
         if (insertError) {
             console.error('Error registering user:', insertError.message);
-            setError('Registration failed. Please try again.');
+            setError('Ошибка регистрации. Пожалуйста, попробуйте снова.');
             setIsLoading(false);
         } else {
             router.push('/');
@@ -90,27 +89,31 @@ export default function Register() {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <p className="text-xl">Загрузка...</p>
+            <div className="flex items-center justify-center min-h-screen bg-gray-50">
+                <p className="text-xl font-medium text-gray-700">Загрузка...</p>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <p className="text-xl text-red-500">{error}</p>
+            <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
+                <div className="bg-white p-6 rounded-2xl shadow-xl max-w-md text-center">
+                    <p className="text-xl font-medium text-red-600">{error}</p>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold text-center">Регистрация</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
+                <h2 className="text-4xl font-extrabold text-gray-900 mb-6 text-center tracking-tight">
+                    Регистрация
+                </h2>
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
                             Имя
                         </label>
                         <input
@@ -120,11 +123,11 @@ export default function Register() {
                             required
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
-                            className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
                         />
                     </div>
                     <div>
-                        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
                             Фамилия
                         </label>
                         <input
@@ -134,11 +137,11 @@ export default function Register() {
                             required
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
-                            className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
                         />
                     </div>
                     <div>
-                        <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
                             Номер телефона
                         </label>
                         <input
@@ -148,13 +151,13 @@ export default function Register() {
                             required
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
-                            className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
                         />
                     </div>
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400"
+                        className="w-full px-4 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 transition-colors"
                     >
                         Зарегистрироваться
                     </button>
