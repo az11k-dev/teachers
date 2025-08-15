@@ -6,15 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5396cf71-fd3c-4a26-9c53-32726d463399" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/[schoolId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/[schoolId]/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/[regionId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[regionId]/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/admin/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apply/[vacancyId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apply/[vacancyId]/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/register/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/register/page.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -19,52 +19,59 @@ export default function AdminPage() {
     const [action, setAction] = useState(null);
     const [error, setError] = useState(null);
 
+    // This useEffect will run only on the client side after the component mounts.
     useEffect(() => {
         async function initializeAdminPanel() {
-            if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
-                console.error("Telegram WebApp API not available.");
-                setError("Пожалуйста, откройте эту страницу в приложении Telegram.");
-                setIsLoading(false);
-                return;
-            }
+            try {
+                // We'll check for the Telegram WebApp API here, inside the client-side useEffect.
+                if (!window.Telegram?.WebApp) {
+                    throw new Error("Telegram WebApp API not available.");
+                }
 
-            window.Telegram.WebApp.ready();
-            const telegramUser = window.Telegram.WebApp.initDataUnsafe?.user;
+                window.Telegram.WebApp.ready();
+                const telegramUser = window.Telegram.WebApp.initDataUnsafe?.user;
 
-            if (!telegramUser) {
+                if (!telegramUser) {
+                    setIsAdmin(false);
+                    setIsLoading(false);
+                    return;
+                }
+
+                const {data: userData, error: userError} = await supabase
+                    .from('users')
+                    .select('id, role')
+                    .eq('telegram_id', telegramUser.id)
+                    .single();
+
+                if (userError || userData.role !== 'admin') {
+                    setIsAdmin(false);
+                    setIsLoading(false);
+                    return;
+                }
+
+                const {data: schoolData, error: schoolError} = await supabase
+                    .from('school_admins')
+                    .select('school_id')
+                    .eq('user_id', userData.id);
+
+                if (schoolError || schoolData.length === 0) {
+                    setIsAdmin(false);
+                    setIsLoading(false);
+                    setError("У вас нет назначенных школ.");
+                    return;
+                }
+
+                const schoolIds = schoolData.map(item => item.school_id);
+                setAdminSchoolIds(schoolIds);
+                setIsAdmin(true);
+                await fetchApplications(schoolIds);
+            } catch (err) {
+                // We can catch any errors that occur while initializing, including the Telegram API check.
+                console.error("Initialization Error:", err.message);
+                setError(err.message === "Telegram WebApp API not available." ? "Пожалуйста, откройте эту страницу в приложении Telegram." : "Произошла ошибка при загрузке данных.");
                 setIsAdmin(false);
                 setIsLoading(false);
-                return;
             }
-
-            const {data: userData, error: userError} = await supabase
-                .from('users')
-                .select('id, role')
-                .eq('telegram_id', telegramUser.id)
-                .single();
-
-            if (userError || userData.role !== 'admin') {
-                setIsAdmin(false);
-                setIsLoading(false);
-                return;
-            }
-
-            const {data: schoolData, error: schoolError} = await supabase
-                .from('school_admins')
-                .select('school_id')
-                .eq('user_id', userData.id);
-
-            if (schoolError || schoolData.length === 0) {
-                setIsAdmin(false);
-                setIsLoading(false);
-                setError("У вас нет назначенных школ.");
-                return;
-            }
-
-            const schoolIds = schoolData.map(item => item.school_id);
-            setAdminSchoolIds(schoolIds);
-            setIsAdmin(true);
-            await fetchApplications(schoolIds);
         }
 
         initializeAdminPanel();
