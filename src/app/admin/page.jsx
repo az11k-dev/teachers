@@ -23,7 +23,7 @@ export default function AdminPage() {
         async function initializeAdminPanel() {
             if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
                 console.error("Telegram WebApp API not available.");
-                setError("Пожалуйста, откройте эту страницу в приложении Telegram.");
+                setError("Iltimos, bu sahifani Telegram ilovasida oching.");
                 setIsLoading(false);
                 return;
             }
@@ -57,7 +57,7 @@ export default function AdminPage() {
             if (schoolError || schoolData.length === 0) {
                 setIsAdmin(false);
                 setIsLoading(false);
-                setError("У вас нет назначенных школ.");
+                setError("Sizga birorta ham maktab tayinlanmagan.");
                 return;
             }
 
@@ -81,7 +81,7 @@ export default function AdminPage() {
 
         if (error) {
             console.error('Error fetching applications:', error.message);
-            setError('Ошибка загрузки заявок. Пожалуйста, попробуйте снова.');
+            setError('Arizalarni yuklashda xatolik. Iltimos, qayta urinib koʻring.');
         } else {
             setApplications(data);
         }
@@ -102,7 +102,7 @@ export default function AdminPage() {
 
         if (updateError) {
             console.error('Error updating status:', updateError.message);
-            setError('Ошибка обновления статуса. Попробуйте еще раз.');
+            setError('Holatni yangilashda xatolik. Iltimos, yana bir bor urinib koʻring.');
             setIsLoading(false);
         } else {
             const notificationRes = await fetch('/api/notify', {
@@ -158,7 +158,7 @@ export default function AdminPage() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-50">
-                <p className="text-xl font-medium text-gray-700">Загрузка...</p>
+                <p className="text-xl font-medium text-gray-700">Yuklanmoqda...</p>
             </div>
         );
     }
@@ -167,7 +167,7 @@ export default function AdminPage() {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
                 <div className="bg-white p-8 rounded-2xl shadow-xl max-w-sm text-center">
-                    <p className="text-xl font-medium text-red-600">Доступ запрещён.</p>
+                    <p className="text-xl font-medium text-red-600">Kirish taqiqlangan.</p>
                 </div>
             </div>
         );
@@ -186,7 +186,7 @@ export default function AdminPage() {
     return (
         <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
             <div className="flex justify-start mb-4">
-                {/* Используем кнопку с router.back() для возврата на предыдущую страницу */}
+                {/* Orqaga qaytish uchun router.back() dan foydalanamiz */}
                 <button onClick={() => router.back()}>
                     <BiArrowBack size={25}
                                  className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
@@ -195,10 +195,10 @@ export default function AdminPage() {
             <div className="flex flex-col items-center">
                 <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-3xl w-full">
                     <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center tracking-tight">
-                        Панель администратора
+                        Administrator paneli
                     </h1>
                     {applications.length === 0 ? (
-                        <p className="text-center text-lg text-gray-600">Заявок пока нет.</p>
+                        <p className="text-center text-lg text-gray-600">Hozircha arizalar yoʻq.</p>
                     ) : (
                         <ul className="space-y-4">
                             {applications.map((app) => (
@@ -207,22 +207,22 @@ export default function AdminPage() {
                                         className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                                         <div className="mb-4 sm:mb-0">
                                             <h2 className="text-xl font-bold text-gray-900">
-                                                Заявка на: {app?.vacancies?.title}
+                                                Arizalar: {app?.vacancies?.title}
                                             </h2>
                                             <p className="text-sm text-gray-600 mt-1">
                                                 <span
-                                                    className="font-medium">Школа:</span> {app.vacancies.schools?.name || 'Неизвестно'}
+                                                    className="font-medium">Maktab:</span> {app.vacancies.schools?.name || 'Nomaʼlum'}
                                             </p>
                                             <p className="text-sm text-gray-600">
                                                 <span
-                                                    className="font-medium">От:</span> {app.users.first_name} {app.users.last_name} ({app.users.phone_number})
+                                                    className="font-medium">Dan:</span> {app.users.first_name} {app.users.last_name} ({app.users.phone_number})
                                             </p>
                                         </div>
                                         <div className="flex items-center space-x-2">
                                             <span
                                                 className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusStyle(app.status)}`}>
                                                 {getStatusIcon(app.status)}
-                                                {app.status === 'pending' ? 'В ожидании' : app.status === 'accepted' ? 'Принята' : 'Отклонена'}
+                                                {app.status === 'pending' ? 'Koʻrib chiqilmoqda' : app.status === 'accepted' ? 'Qabul qilingan' : 'Rad etilgan'}
                                             </span>
                                             <div className="flex space-x-2">
                                                 <button
@@ -252,13 +252,13 @@ export default function AdminPage() {
                                         <p className="text-sm text-gray-700 flex items-center">
                                             <LuMessageSquare className="mr-2"/>
                                             <span
-                                                className="font-medium">Комментарий пользователя:</span> {app.feedback || "Нет комментария."}
+                                                className="font-medium">Foydalanuvchi izohi:</span> {app.feedback || "Izoh yoʻq."}
                                         </p>
                                         {app.admin_comment && (
                                             <p className="text-sm text-gray-700 flex items-center mt-2">
                                                 <LuEye className="mr-2"/>
                                                 <span
-                                                    className="font-medium">Комментарий администратора:</span> {app.admin_comment}
+                                                    className="font-medium">Administrator izohi:</span> {app.admin_comment}
                                             </p>
                                         )}
                                     </div>
@@ -266,7 +266,7 @@ export default function AdminPage() {
                                         <div className="mt-4">
                                             <p className="text-sm font-medium text-gray-700 flex items-center mb-2">
                                                 <LuFile className="mr-2"/>
-                                                Прикрепленные файлы:
+                                                Biriktirilgan fayllar:
                                             </p>
                                             <ul className="space-y-1">
                                                 {app.file_paths.map((path, index) => (
@@ -291,20 +291,19 @@ export default function AdminPage() {
                         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4">
                             <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md">
                                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                    {action === 'accepted' ? 'Принять заявку' : 'Отклонить заявку'}
+                                    {action === 'accepted' ? 'Arizani qabul qilish' : 'Arizani rad etish'}
                                 </h3>
                                 <p className="text-gray-600 mb-6">
-                                    Вы уверены, что хотите {action === 'accepted' ? 'принять' : 'отклонить'} заявку на
-                                    вакансию **{selectedApplication.vacancies.title}**?
+                                    Siz **{selectedApplication.vacancies.title}** lavozimi uchun arizani {action === 'accepted' ? 'qabul qilishni' : 'rad etishni'} xohlaysizmi?
                                 </p>
                                 <p className="text-gray-600 mb-4">
-                                    Вы можете добавить комментарий для пользователя.
+                                    Foydalanuvchi uchun izoh qoʻshishingiz mumkin.
                                 </p>
                                 <textarea
                                     value={comment}
                                     onChange={(e) => setComment(e.target.value)}
                                     className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                                    placeholder="Комментарий администратора (необязательно)"
+                                    placeholder="Administrator izohi (ixtiyoriy)"
                                     rows="4"
                                 />
                                 <div className="mt-6 flex justify-end space-x-2">
@@ -316,7 +315,7 @@ export default function AdminPage() {
                                         }}
                                         className="px-5 py-2 font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
                                     >
-                                        Отмена
+                                        Bekor qilish
                                     </button>
                                     <button
                                         onClick={handleStatusChange}
@@ -325,7 +324,7 @@ export default function AdminPage() {
                                             action === 'accepted' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
                                         } disabled:opacity-50`}
                                     >
-                                        {isLoading ? 'Обработка...' : 'Подтвердить'}
+                                        {isLoading ? 'Jarayon ketmoqda...' : 'Tasdiqlash'}
                                     </button>
                                 </div>
                             </div>

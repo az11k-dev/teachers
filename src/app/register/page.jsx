@@ -19,7 +19,7 @@ export default function Register() {
         async function initializeUser() {
             if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
                 console.error("Telegram WebApp API not available.");
-                setError("Пожалуйста, откройте эту страницу в приложении Telegram.");
+                setError("Iltimos, bu sahifani Telegram ilovasida oching.");
                 setIsLoading(false);
                 return;
             }
@@ -29,7 +29,7 @@ export default function Register() {
 
             if (!user?.id) {
                 console.error('Telegram user data not found.');
-                setError("Не удалось получить данные пользователя из Telegram.");
+                setError("Telegramdan foydalanuvchi maʼlumotlarini olish imkoni boʻlmadi.");
                 setIsLoading(false);
                 return;
             }
@@ -48,7 +48,7 @@ export default function Register() {
                 router.push('/');
             } else if (fetchError && fetchError.code !== 'PGRST116') {
                 console.error('Error checking user:', fetchError.message);
-                setError('Произошла ошибка. Пожалуйста, попробуйте снова.');
+                setError('Xatolik yuz berdi. Iltimos, qayta urinib koʻring.');
                 setIsLoading(false);
             } else {
                 setIsLoading(false);
@@ -64,7 +64,7 @@ export default function Register() {
         setError(null);
 
         if (!telegramUser) {
-            setError('Данные пользователя отсутствуют. Пожалуйста, обновите страницу.');
+            setError('Foydalanuvchi maʼlumotlari mavjud emas. Iltimos, sahifani yangilang.');
             setIsLoading(false);
             return;
         }
@@ -80,7 +80,7 @@ export default function Register() {
 
         if (insertError) {
             console.error('Error registering user:', insertError.message);
-            setError('Ошибка регистрации. Пожалуйста, попробуйте снова.');
+            setError('Roʻyxatdan oʻtishda xatolik. Iltimos, qayta urinib koʻring.');
             setIsLoading(false);
         } else {
             router.push('/');
@@ -90,7 +90,7 @@ export default function Register() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-50">
-                <p className="text-xl font-medium text-gray-700">Загрузка...</p>
+                <p className="text-xl font-medium text-gray-700">Yuklanmoqda...</p>
             </div>
         );
     }
@@ -109,12 +109,12 @@ export default function Register() {
         <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
             <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
                 <h2 className="text-4xl font-extrabold text-gray-900 mb-6 text-center tracking-tight">
-                    Регистрация
+                    Roʻyxatdan oʻtish
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                            Имя
+                            Ism
                         </label>
                         <input
                             id="firstName"
@@ -128,7 +128,7 @@ export default function Register() {
                     </div>
                     <div>
                         <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                            Фамилия
+                            Familiya
                         </label>
                         <input
                             id="lastName"
@@ -142,7 +142,7 @@ export default function Register() {
                     </div>
                     <div>
                         <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
-                            Номер телефона
+                            Telefon raqam
                         </label>
                         <input
                             id="phoneNumber"
@@ -159,7 +159,7 @@ export default function Register() {
                         disabled={isLoading}
                         className="w-full px-4 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 transition-colors"
                     >
-                        Зарегистрироваться
+                        Roʻyxatdan oʻtish
                     </button>
                 </form>
             </div>

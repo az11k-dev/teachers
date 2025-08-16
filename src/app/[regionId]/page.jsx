@@ -8,7 +8,7 @@ async function DistrictList({regionId}) {
         const districts = await getDistricts(regionId);
 
         if (!districts || districts.length === 0) {
-            return <EmptyState message="Районы не найдены для этого региона."/>;
+            return <EmptyState message="Bu hudud uchun tumanlar topilmadi."/>;
         }
 
         return (
@@ -33,26 +33,26 @@ async function DistrictList({regionId}) {
         );
     } catch (error) {
         console.error("Error in DistrictList component:", error);
-        return <EmptyState message="Не удалось загрузить районы."/>;
+        return <EmptyState message="Tumanlarni yuklab bo‘lmadi."/>;
     }
 }
 
 export default async function DistrictsPage({params}) {
     const {regionId} = await params;
     return (
-        // Главный контейнер, который теперь не центрирует всё подряд
+        // Asosiy konteyner
         <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
-            {/* Этот блок с иконкой теперь находится в основном потоке, но не внутри центрирующего контейнера */}
+            {/* Orqaga qaytish tugmasi */}
             <div className="flex justify-start mb-3">
                 <Link href="/">
                     <BiArrowBack size={25} className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
                 </Link>
             </div>
 
-            {/* Это основной центрируемый блок для контента */}
+            {/* Asosiy kontent bloki */}
             <div className="flex flex-col items-center">
                 <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-center tracking-tight">
-                    Выберите район
+                    Tumanni tanlang
                 </h1>
                 <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
                     <DistrictList regionId={regionId}/>

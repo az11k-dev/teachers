@@ -8,7 +8,7 @@ async function SchoolList({regionId, districtId}) {
         const schools = await getSchools(districtId);
 
         if (!schools || schools.length === 0) {
-            return <EmptyState message="Школы не найдены для этого района."/>;
+            return <EmptyState message="Bu tuman uchun maktablar topilmadi."/>;
         }
 
         return (
@@ -33,27 +33,27 @@ async function SchoolList({regionId, districtId}) {
         );
     } catch (error) {
         console.error("Error in SchoolList component:", error);
-        return <EmptyState message="Не удалось загрузить школы."/>;
+        return <EmptyState message="Maktablarni yuklab bo‘lmadi."/>;
     }
 }
 
 export default async function SchoolsPage({params}) {
     const {regionId, districtId} = await params;
     return (
-        // Главный контейнер, который теперь не центрирует всё подряд
+        // Asosiy konteyner
         <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
-            {/* Этот блок с иконкой теперь находится в основном потоке, но не внутри центрирующего контейнера */}
+            {/* Orqaga qaytish tugmasi */}
             <div className="flex justify-start mb-4">
                 <Link href={`/${regionId}`}>
                     <BiArrowBack size={25} className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
                 </Link>
             </div>
 
-            {/* Это основной центрируемый блок для контента */}
+            {/* Asosiy kontent bloki */}
             <div className="flex flex-col items-center">
                 <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
                     <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-center tracking-tight">
-                        Выберите школу
+                        Maktabni tanlang
                     </h1>
                     <SchoolList regionId={regionId} districtId={districtId}/>
                 </div>

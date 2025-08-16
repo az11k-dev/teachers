@@ -8,7 +8,7 @@ async function VacancyList({schoolId}) {
         const vacancies = await getVacancies(schoolId);
 
         if (!vacancies || vacancies.length === 0) {
-            return <EmptyState message="Вакансии не найдены для этой школы."/>;
+            return <EmptyState message="Bu maktab uchun vakansiyalar topilmadi."/>;
         }
 
         return (
@@ -26,7 +26,7 @@ async function VacancyList({schoolId}) {
                             href={`/apply/${vacancy.id}`}
                             className="px-5 ml-2 text-center py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
-                            Подать заявку
+                            Ariza topshirish
                         </Link>
                     </li>
                 ))}
@@ -34,17 +34,17 @@ async function VacancyList({schoolId}) {
         );
     } catch (error) {
         console.error("Error in VacancyList component:", error);
-        return <EmptyState message="Не удалось загрузить вакансии."/>;
+        return <EmptyState message="Vakansiyalarni yuklab bo‘lmadi."/>;
     }
 }
 
 export default async function VacanciesPage({params}) {
-    const {regionId, districtId, schoolId} = await params; // Получаем все параметры
+    const {regionId, districtId, schoolId} = await params; // Barcha parametrlarni olamiz
 
     const schoolIdAsNumber = parseInt(schoolId, 10);
 
     if (isNaN(schoolIdAsNumber)) {
-        return <EmptyState message="Некорректный идентификатор школы."/>;
+        return <EmptyState message="Maktab identifikatori noto'g'ri."/>;
     }
 
     return (
@@ -58,7 +58,7 @@ export default async function VacanciesPage({params}) {
             <div className="flex flex-col items-center">
                 <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
                     <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-center tracking-tight">
-                        Вакансии
+                        Vakansiyalar
                     </h1>
                     <VacancyList schoolId={schoolIdAsNumber}/>
                 </div>

@@ -21,7 +21,7 @@ export default function ApplyPage({params}) {
     useEffect(() => {
         const initializePage = async () => {
             if (typeof window === 'undefined' || !window.Telegram?.WebApp) {
-                setError("Пожалуйста, откройте эту страницу в приложении Telegram.");
+                setError("Iltimos, ushbu sahifani Telegram ilovasida oching.");
                 setIsLoading(false);
                 return;
             }
@@ -30,7 +30,7 @@ export default function ApplyPage({params}) {
             const telegramUser = window.Telegram.WebApp.initDataUnsafe?.user;
 
             if (!telegramUser?.id) {
-                setError('Пользователь Telegram не найден.');
+                setError('Telegram foydalanuvchisi topilmadi.');
                 setIsLoading(false);
                 return;
             }
@@ -42,7 +42,7 @@ export default function ApplyPage({params}) {
                 .single();
 
             if (userError || !userData) {
-                setError('Пользователь не зарегистрирован. Перенаправление на страницу регистрации...');
+                setError('Foydalanuvchi roʻyxatdan oʻtmagan. Roʻyxatdan oʻtish sahifasiga yoʻnaltirilmoqda...');
                 setTimeout(() => router.push('/register'), 2000);
                 return;
             }
@@ -55,7 +55,7 @@ export default function ApplyPage({params}) {
                 .single();
 
             if (vacancyError || !vacancyData) {
-                setError('Не удалось загрузить данные о вакансии.');
+                setError('Vakansiya maʼlumotlarini yuklab boʻlmadi.');
                 setIsLoading(false);
                 return;
             }
@@ -77,13 +77,13 @@ export default function ApplyPage({params}) {
         setError(null);
 
         if (!user) {
-            setError('Ошибка: Пользователь не авторизован.');
+            setError('Xatolik: Foydalanuvchi avtorizatsiyadan oʻtmagan.');
             setIsLoading(false);
             return;
         }
 
         if (files.length === 0) {
-            setError('Пожалуйста, выберите хотя бы один файл.');
+            setError('Iltimos, kamida bitta fayl tanlang.');
             setIsLoading(false);
             return;
         }
@@ -96,7 +96,7 @@ export default function ApplyPage({params}) {
                 .upload(filePath, file);
 
             if (uploadError) {
-                setError(`Ошибка загрузки файла: ${uploadError.message}`);
+                setError(`Faylni yuklashda xatolik: ${uploadError.message}`);
                 setIsLoading(false);
                 return;
             }
@@ -113,7 +113,7 @@ export default function ApplyPage({params}) {
             });
 
         if (insertError) {
-            setError(`Ошибка отправки заявки: ${insertError.message}`);
+            setError(`Arizani yuborishda xatolik: ${insertError.message}`);
         } else {
             const notificationRes = await fetch('/api/notify-admin', {
                 method: 'POST',
@@ -125,7 +125,7 @@ export default function ApplyPage({params}) {
                 console.error('Error sending admin notification:', await notificationRes.text());
             }
 
-            alert('Ваша заявка успешно отправлена!');
+            alert('Sizning arizangiz muvaffaqiyatli yuborildi!');
             router.push(`/`);
         }
         setIsLoading(false);
@@ -134,7 +134,7 @@ export default function ApplyPage({params}) {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-50">
-                <p className="text-xl font-medium text-gray-700">Загрузка...</p>
+                <p className="text-xl font-medium text-gray-700">Yuklanmoqda...</p>
             </div>
         );
     }
@@ -147,41 +147,28 @@ export default function ApplyPage({params}) {
         <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
             <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
                 <h2 className="text-4xl font-extrabold text-gray-900 mb-2 text-center tracking-tight">
-                    Подача заявки
+                    Ariza topshirish
                 </h2>
                 <p className="text-xl text-center font-medium text-indigo-600 mb-8">
-                    на вакансию: {vacancy?.title || 'Неизвестно'}
+                    vakansiya: {vacancy?.title || 'Nomaʼlum'}
                 </p>
 
                 <div className="bg-gray-50 p-4 rounded-xl mb-6 border border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Ваши данные:</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Sizning maʼlumotlaringiz:</h3>
                     <div className="text-gray-700 space-y-1">
                         <p>
-                            <span className="font-medium">Имя:</span> {user.first_name} {user.last_name}
+                            <span className="font-medium">Ism:</span> {user.first_name} {user.last_name}
                         </p>
                         <p>
-                            <span className="font-medium">Телефон:</span> {user.phone_number}
+                            <span className="font-medium">Telefon:</span> {user.phone_number}
                         </p>
                     </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-1">
-                            Комментарий
-                        </label>
-                        <textarea
-                            id="feedback"
-                            name="feedback"
-                            rows="4"
-                            value={feedback}
-                            onChange={(e) => setFeedback(e.target.value)}
-                            className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
-                        />
-                    </div>
-                    <div>
                         <label htmlFor="files" className="block text-sm font-medium text-gray-700 mb-1">
-                            Прикрепить документы
+                            Hujjatlarni biriktirish
                         </label>
                         <input
                             id="files"
@@ -192,12 +179,25 @@ export default function ApplyPage({params}) {
                             className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors"
                         />
                     </div>
+                    <div>
+                        <label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-1">
+                            Izoh
+                        </label>
+                        <textarea
+                            id="feedback"
+                            name="feedback"
+                            rows="4"
+                            value={feedback}
+                            onChange={(e) => setFeedback(e.target.value)}
+                            className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
+                        />
+                    </div>
                     <button
                         type="submit"
                         disabled={isLoading}
                         className="w-full px-4 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 transition-colors"
                     >
-                        {isLoading ? 'Отправка...' : 'Отправить заявку'}
+                        {isLoading ? 'Yuborilmoqda...' : 'Arizani yuborish'}
                     </button>
                 </form>
             </div>

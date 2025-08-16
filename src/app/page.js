@@ -7,7 +7,7 @@ async function RegionList() {
     try {
         const regions = await getRegions();
         if (!regions || regions.length === 0) {
-            return <EmptyState message="No regions found."/>;
+            return <EmptyState message="Hududlar topilmadi."/>;
         }
 
         return (
@@ -31,8 +31,8 @@ async function RegionList() {
             </ul>
         );
     } catch (error) {
-        console.error("Error in RegionList component:", error);
-        return <EmptyState message="Failed to load regions."/>;
+        console.error("RegionList komponentasida xatolik:", error);
+        return <EmptyState message="Hududlarni yuklashda xatolik yuz berdi."/>;
     }
 }
 
@@ -41,7 +41,7 @@ export default async function HomePage() {
         <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
             <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
                 <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-center tracking-tight">
-                    Выберите регион
+                    Hududni tanlang
                 </h1>
                 <div className="mb-8">
                     <NavigationLinks/>

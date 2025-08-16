@@ -2,31 +2,31 @@
 
 import { useState, useEffect } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser-client";
-import { BiArrowBack } from "react-icons/bi"; // Добавляем импорт иконки
-import { useRouter } from 'next/navigation'; // Добавляем импорт useRouter
+import { BiArrowBack } from "react-icons/bi";
+import { useRouter } from 'next/navigation';
 
 const supabase = createSupabaseBrowserClient();
 
 export default function VacanciesPage() {
-    const router = useRouter(); // Инициализируем роутер
+    const router = useRouter();
     const [vacancies, setVacancies] = useState([]);
     const [schoolId, setSchoolId] = useState(null);
     const [form, setForm] = useState({ id: null, title: "", rate: "" });
     const [loading, setLoading] = useState(false);
 
-    // Load user's school_id and fetch vacancies
+    // Foydalanuvchi maktab ID'sini yuklash va vakansiyalarni olish
     useEffect(() => {
         const load = async () => {
-            // Проверяем, доступны ли данные Telegram WebApp
+            // Telegram WebApp ma'lumotlari mavjudligini tekshiramiz
             if (typeof window === 'undefined' || !window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
-                console.error("Telegram user data not found.");
+                console.error("Telegram foydalanuvchisi ma'lumotlari topilmadi.");
                 return;
             }
 
-            // Получаем telegram_id из данных WebApp
+            // WebApp ma'lumotlaridan telegram_id ni olamiz
             const telegram_id = window.Telegram.WebApp.initDataUnsafe.user.id;
 
-            // Находим пользователя в таблице 'users' по telegram_id
+            // 'users' jadvalidan telegram_id bo'yicha foydalanuvchini topamiz
             const { data: user, error: userError } = await supabase
                 .from("users")
                 .select("id")
@@ -34,11 +34,11 @@ export default function VacanciesPage() {
                 .single();
 
             if (userError || !user) {
-                console.error("No user found with this Telegram ID.", userError);
+                console.error("Bu Telegram ID bilan foydalanuvchi topilmadi.", userError);
                 return;
             }
 
-            // Используем найденный user.id для поиска school_admin
+            // Topilgan user.id'ni ishlatib, school_admin'ni topamiz
             const { data: admin, error: adminError } = await supabase
                 .from("school_admins")
                 .select("school_id")
@@ -49,13 +49,13 @@ export default function VacanciesPage() {
                 setSchoolId(admin.school_id);
                 fetchVacancies(admin.school_id);
             } else {
-                console.error("No school admin found for this user.", adminError);
+                console.error("Bu foydalanuvchi uchun maktab ma'muri topilmadi.", adminError);
             }
         };
         load();
     }, []);
 
-    // Load vacancies for a specific school
+    // Muayyan maktab uchun vakansiyalarni yuklash
     async function fetchVacancies(id) {
         const { data, error } = await supabase
             .from("vacancies")
@@ -64,16 +64,16 @@ export default function VacanciesPage() {
             .order("created_at", { ascending: false });
 
         if (error) {
-            console.error("Error fetching vacancies:", error);
+            console.error("Vakansiyalarni yuklashda xatolik:", error);
             return;
         }
         setVacancies(data || []);
     }
 
-    // Create or update a vacancy
+    // Vakansiyani yaratish yoki yangilash
     async function saveVacancy() {
         if (!schoolId) {
-            console.error("School ID is not available.");
+            console.error("Maktab ID'si mavjud emas.");
             return;
         }
         setLoading(true);
@@ -97,18 +97,18 @@ export default function VacanciesPage() {
         }
 
         if (result.error) {
-            console.error("Error saving vacancy:", result.error);
+            console.error("Vakansiyani saqlashda xatolik:", result.error);
         } else {
-            setForm({ id: null, title: "", rate: "" }); // Reset form
+            setForm({ id: null, title: "", rate: "" }); // Formani qayta oʻrnatish
             fetchVacancies(schoolId);
         }
 
         setLoading(false);
     }
 
-    // Delete a vacancy
+    // Vakansiyani o'chirish
     async function deleteVacancy(id) {
-        if (!confirm("Are you sure you want to delete this vacancy?")) {
+        if (!confirm("Haqiqatan ham bu vakansiyani o'chirmoqchimisiz?")) {
             return;
         }
 
@@ -116,7 +116,7 @@ export default function VacanciesPage() {
         const { error } = await supabase.from("vacancies").delete().eq("id", id);
 
         if (error) {
-            console.error("Error deleting vacancy:", error);
+            console.error("Vakansiyani o'chirishda xatolik:", error);
         } else if (schoolId) {
             fetchVacancies(schoolId);
         }
@@ -126,7 +126,7 @@ export default function VacanciesPage() {
 
     return (
         <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
-            {/* Кнопка "Назад" */}
+            {/* "Orqaga" tugmasi */}
             <div className="flex justify-start mb-4">
                 <button onClick={() => router.back()}>
                     <BiArrowBack size={25}
@@ -136,18 +136,18 @@ export default function VacanciesPage() {
 
             <div className="flex flex-col items-center">
                 <div className="p-6 max-w-2xl w-full mx-auto bg-white rounded-2xl shadow-xl">
-                    <h1 className="text-2xl font-bold mb-4">Manage Vacancies</h1>
+                    <h1 className="text-2xl font-bold mb-4">Vakansiyalarni boshqarish</h1>
                     <div className="space-y-2 mb-6">
                         <input
                             type="text"
-                            placeholder="Title"
+                            placeholder="Lavozim nomi"
                             className="w-full border p-2 rounded"
                             value={form.title}
                             onChange={(e) => setForm({ ...form, title: e.target.value })}
                         />
                         <input
                             type="text"
-                            placeholder="Rate"
+                            placeholder="Stavka"
                             className="w-full border p-2 rounded"
                             value={form.rate}
                             onChange={(e) => setForm({ ...form, rate: e.target.value })}
@@ -159,10 +159,10 @@ export default function VacanciesPage() {
                             }`}
                         >
                             {loading
-                                ? "Saving..."
+                                ? "Saqlanmoqda..."
                                 : form.id
-                                    ? "Update Vacancy"
-                                    : "Create Vacancy"}
+                                    ? "Vakansiyani yangilash"
+                                    : "Vakansiya yaratish"}
                         </button>
                     </div>
                     <ul className="divide-y border rounded">
@@ -171,27 +171,27 @@ export default function VacanciesPage() {
                                 <li key={v.id} className="p-3 flex justify-between items-center">
                                     <div>
                                         <p className="font-medium">{v.title}</p>
-                                        <p className="text-sm text-gray-500">Rate: {v.rate}</p>
+                                        <p className="text-sm text-gray-500">Stavka: {v.rate}</p>
                                     </div>
                                     <div className="space-x-2">
                                         <button
                                             className="px-3 py-1 bg-yellow-500 text-white rounded"
                                             onClick={() => setForm({ id: v.id, title: v.title, rate: v.rate })}
                                         >
-                                            Edit
+                                            Tahrirlash
                                         </button>
                                         <button
                                             className="px-3 py-1 bg-red-600 text-white rounded"
                                             onClick={() => deleteVacancy(v.id)}
                                         >
-                                            Delete
+                                            O'chirish
                                         </button>
                                     </div>
                                 </li>
                             ))
                         ) : (
                             <li className="p-3 text-center text-gray-500">
-                                No vacancies found.
+                                Vakansiyalar topilmadi.
                             </li>
                         )}
                     </ul>
