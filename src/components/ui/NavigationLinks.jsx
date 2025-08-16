@@ -9,6 +9,9 @@ export default function NavigationLinks() {
             <Link href="/admin" className="text-indigo-600 hover:text-indigo-800">
                 Admin
             </Link>
+            <Link href="/admin/vacancies" className="text-indigo-600 hover:text-indigo-800">
+                Vacancy
+            </Link>
         </div>
     );
 }
