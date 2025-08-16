@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react';
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import {useRouter} from 'next/navigation';
 import {LuFile, LuDownload, LuEye, LuMessageSquare, LuMailOpen} from "react-icons/lu";
-import {BiCheck, BiXCircle} from "react-icons/bi";
+import {BiArrowBack, BiCheck, BiXCircle} from "react-icons/bi";
 
 export default function AdminPage() {
     const router = useRouter();
@@ -76,7 +76,7 @@ export default function AdminPage() {
             .from('applications')
             .select('*, users(first_name, last_name, phone_number, telegram_id), vacancies(title, school_id, schools(name))')
             .in('vacancies.school_id', schoolIds)
-            .not('vacancies', 'is', null) // Эта строка будет фильтровать все заявки с пустыми вакансиями
+            .not('vacancies', 'is', null)
             .order('created_at', {ascending: false});
 
         if (error) {
@@ -184,145 +184,154 @@ export default function AdminPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
-            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-3xl w-full">
-                <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center tracking-tight">
-                    Панель администратора
-                </h1>
-                {applications.length === 0 ? (
-                    <p className="text-center text-lg text-gray-600">Заявок пока нет.</p>
-                ) : (
-                    <ul className="space-y-4">
-                        {applications.map((app) => (
-                            <li key={app.id} className="bg-gray-50 rounded-xl shadow-sm p-6 border border-gray-200">
-                                <div
-                                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-                                    <div className="mb-4 sm:mb-0">
-                                        <h2 className="text-xl font-bold text-gray-900">
-                                            Заявка на: {app?.vacancies?.title}
-                                        </h2>
-                                        <p className="text-sm text-gray-600 mt-1">
+        <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+            <div className="flex justify-start mb-4">
+                {/* Используем кнопку с router.back() для возврата на предыдущую страницу */}
+                <button onClick={() => router.back()}>
+                    <BiArrowBack size={25}
+                                 className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
+                </button>
+            </div>
+            <div className="flex flex-col items-center">
+                <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-3xl w-full">
+                    <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center tracking-tight">
+                        Панель администратора
+                    </h1>
+                    {applications.length === 0 ? (
+                        <p className="text-center text-lg text-gray-600">Заявок пока нет.</p>
+                    ) : (
+                        <ul className="space-y-4">
+                            {applications.map((app) => (
+                                <li key={app.id} className="bg-gray-50 rounded-xl shadow-sm p-6 border border-gray-200">
+                                    <div
+                                        className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                                        <div className="mb-4 sm:mb-0">
+                                            <h2 className="text-xl font-bold text-gray-900">
+                                                Заявка на: {app?.vacancies?.title}
+                                            </h2>
+                                            <p className="text-sm text-gray-600 mt-1">
+                                                <span
+                                                    className="font-medium">Школа:</span> {app.vacancies.schools?.name || 'Неизвестно'}
+                                            </p>
+                                            <p className="text-sm text-gray-600">
+                                                <span
+                                                    className="font-medium">От:</span> {app.users.first_name} {app.users.last_name} ({app.users.phone_number})
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
                                             <span
-                                                className="font-medium">Школа:</span> {app.vacancies.schools?.name || 'Неизвестно'}
-                                        </p>
-                                        <p className="text-sm text-gray-600">
-                                            <span
-                                                className="font-medium">От:</span> {app.users.first_name} {app.users.last_name} ({app.users.phone_number})
-                                        </p>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <span
-                                            className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusStyle(app.status)}`}>
-                                            {getStatusIcon(app.status)}
-                                            {app.status === 'pending' ? 'В ожидании' : app.status === 'accepted' ? 'Принята' : 'Отклонена'}
-                                        </span>
-                                        <div className="flex space-x-2">
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedApplication(app);
-                                                    setAction('accepted');
-                                                }}
-                                                className="p-2 text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:bg-green-400"
-                                                disabled={app.status !== 'pending'}
-                                            >
-                                                <BiCheck size={20}/>
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedApplication(app);
-                                                    setAction('rejected');
-                                                }}
-                                                className="p-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:bg-red-400"
-                                                disabled={app.status !== 'pending'}
-                                            >
-                                                <BiXCircle size={20}/>
-                                            </button>
+                                                className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusStyle(app.status)}`}>
+                                                {getStatusIcon(app.status)}
+                                                {app.status === 'pending' ? 'В ожидании' : app.status === 'accepted' ? 'Принята' : 'Отклонена'}
+                                            </span>
+                                            <div className="flex space-x-2">
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedApplication(app);
+                                                        setAction('accepted');
+                                                    }}
+                                                    className="p-2 text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:bg-green-400"
+                                                    disabled={app.status !== 'pending'}
+                                                >
+                                                    <BiCheck size={20}/>
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedApplication(app);
+                                                        setAction('rejected');
+                                                    }}
+                                                    className="p-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:bg-red-400"
+                                                    disabled={app.status !== 'pending'}
+                                                >
+                                                    <BiXCircle size={20}/>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="mt-4 pt-4 border-t border-gray-200">
-                                    <p className="text-sm text-gray-700 flex items-center">
-                                        <LuMessageSquare className="mr-2"/>
-                                        <span
-                                            className="font-medium">Комментарий пользователя:</span> {app.feedback || "Нет комментария."}
-                                    </p>
-                                    {app.admin_comment && (
-                                        <p className="text-sm text-gray-700 flex items-center mt-2">
-                                            <LuEye className="mr-2"/>
+                                    <div className="mt-4 pt-4 border-t border-gray-200">
+                                        <p className="text-sm text-gray-700 flex items-center">
+                                            <LuMessageSquare className="mr-2"/>
                                             <span
-                                                className="font-medium">Комментарий администратора:</span> {app.admin_comment}
+                                                className="font-medium">Комментарий пользователя:</span> {app.feedback || "Нет комментария."}
                                         </p>
-                                    )}
-                                </div>
-                                {app.file_paths && app.file_paths.length > 0 && (
-                                    <div className="mt-4">
-                                        <p className="text-sm font-medium text-gray-700 flex items-center mb-2">
-                                            <LuFile className="mr-2"/>
-                                            Прикрепленные файлы:
-                                        </p>
-                                        <ul className="space-y-1">
-                                            {app.file_paths.map((path, index) => (
-                                                <li key={index}>
-                                                    <a href={supabase.storage.from('application-documents').getPublicUrl(path).data.publicUrl}
-                                                       target="_blank" rel="noopener noreferrer"
-                                                       className="flex items-center text-sm text-indigo-600 hover:underline">
-                                                        <LuDownload className="mr-2"/>
-                                                        {path.split('/').pop()}
-                                                    </a>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        {app.admin_comment && (
+                                            <p className="text-sm text-gray-700 flex items-center mt-2">
+                                                <LuEye className="mr-2"/>
+                                                <span
+                                                    className="font-medium">Комментарий администратора:</span> {app.admin_comment}
+                                            </p>
+                                        )}
                                     </div>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                                    {app.file_paths && app.file_paths.length > 0 && (
+                                        <div className="mt-4">
+                                            <p className="text-sm font-medium text-gray-700 flex items-center mb-2">
+                                                <LuFile className="mr-2"/>
+                                                Прикрепленные файлы:
+                                            </p>
+                                            <ul className="space-y-1">
+                                                {app.file_paths.map((path, index) => (
+                                                    <li key={index}>
+                                                        <a href={supabase.storage.from('application-documents').getPublicUrl(path).data.publicUrl}
+                                                           target="_blank" rel="noopener noreferrer"
+                                                           className="flex items-center text-sm text-indigo-600 hover:underline">
+                                                            <LuDownload className="mr-2"/>
+                                                            {path.split('/').pop()}
+                                                        </a>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
 
-                {selectedApplication && (
-                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4">
-                        <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md">
-                            <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                {action === 'accepted' ? 'Принять заявку' : 'Отклонить заявку'}
-                            </h3>
-                            <p className="text-gray-600 mb-6">
-                                Вы уверены, что хотите {action === 'accepted' ? 'принять' : 'отклонить'} заявку на
-                                вакансию **{selectedApplication.vacancies.title}**?
-                            </p>
-                            <p className="text-gray-600 mb-4">
-                                Вы можете добавить комментарий для пользователя.
-                            </p>
-                            <textarea
-                                value={comment}
-                                onChange={(e) => setComment(e.target.value)}
-                                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                                placeholder="Комментарий администратора (необязательно)"
-                                rows="4"
-                            />
-                            <div className="mt-6 flex justify-end space-x-2">
-                                <button
-                                    onClick={() => {
-                                        setSelectedApplication(null);
-                                        setComment('');
-                                        setAction(null);
-                                    }}
-                                    className="px-5 py-2 font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
-                                >
-                                    Отмена
-                                </button>
-                                <button
-                                    onClick={handleStatusChange}
-                                    disabled={isLoading}
-                                    className={`px-5 py-2 font-semibold text-white rounded-lg transition-colors ${
-                                        action === 'accepted' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
-                                    } disabled:opacity-50`}
-                                >
-                                    {isLoading ? 'Обработка...' : 'Подтвердить'}
-                                </button>
+                    {selectedApplication && (
+                        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4">
+                            <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md">
+                                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                                    {action === 'accepted' ? 'Принять заявку' : 'Отклонить заявку'}
+                                </h3>
+                                <p className="text-gray-600 mb-6">
+                                    Вы уверены, что хотите {action === 'accepted' ? 'принять' : 'отклонить'} заявку на
+                                    вакансию **{selectedApplication.vacancies.title}**?
+                                </p>
+                                <p className="text-gray-600 mb-4">
+                                    Вы можете добавить комментарий для пользователя.
+                                </p>
+                                <textarea
+                                    value={comment}
+                                    onChange={(e) => setComment(e.target.value)}
+                                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                    placeholder="Комментарий администратора (необязательно)"
+                                    rows="4"
+                                />
+                                <div className="mt-6 flex justify-end space-x-2">
+                                    <button
+                                        onClick={() => {
+                                            setSelectedApplication(null);
+                                            setComment('');
+                                            setAction(null);
+                                        }}
+                                        className="px-5 py-2 font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+                                    >
+                                        Отмена
+                                    </button>
+                                    <button
+                                        onClick={handleStatusChange}
+                                        disabled={isLoading}
+                                        className={`px-5 py-2 font-semibold text-white rounded-lg transition-colors ${
+                                            action === 'accepted' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
+                                        } disabled:opacity-50`}
+                                    >
+                                        {isLoading ? 'Обработка...' : 'Подтвердить'}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </div>
     );

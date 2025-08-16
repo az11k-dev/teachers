@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import EmptyState from "@/components/ui/EmptyState";
 import {getVacancies} from "@/lib/data/vacancies";
+import { BiArrowBack } from "react-icons/bi"; // Добавляем импорт иконки
 
 async function VacancyList({schoolId}) {
     try {
@@ -38,7 +39,8 @@ async function VacancyList({schoolId}) {
 }
 
 export default async function VacanciesPage({params}) {
-    const {schoolId} = await params;
+    const {regionId, districtId, schoolId} = await params; // Получаем все параметры
+
     const schoolIdAsNumber = parseInt(schoolId, 10);
 
     if (isNaN(schoolIdAsNumber)) {
@@ -46,12 +48,20 @@ export default async function VacanciesPage({params}) {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
-            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
-                <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-center tracking-tight">
-                    Вакансии
-                </h1>
-                <VacancyList schoolId={schoolIdAsNumber}/>
+        <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+            <div className="flex justify-start mb-4">
+                <Link href={`/${regionId}/${districtId}`}>
+                    <BiArrowBack size={25} className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
+                </Link>
+            </div>
+
+            <div className="flex flex-col items-center">
+                <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
+                    <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-center tracking-tight">
+                        Вакансии
+                    </h1>
+                    <VacancyList schoolId={schoolIdAsNumber}/>
+                </div>
             </div>
         </div>
     );

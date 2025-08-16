@@ -2,10 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser-client";
+import { BiArrowBack } from "react-icons/bi"; // Добавляем импорт иконки
+import { useRouter } from 'next/navigation'; // Добавляем импорт useRouter
 
 const supabase = createSupabaseBrowserClient();
 
 export default function VacanciesPage() {
+    const router = useRouter(); // Инициализируем роутер
     const [vacancies, setVacancies] = useState([]);
     const [schoolId, setSchoolId] = useState(null);
     const [form, setForm] = useState({ id: null, title: "", rate: "" });
@@ -122,66 +125,78 @@ export default function VacanciesPage() {
     }
 
     return (
-        <div className="p-6 max-w-2xl mx-auto">
-            <h1 className="text-2xl font-bold mb-4">Manage Vacancies</h1>
-            <div className="space-y-2 mb-6">
-                <input
-                    type="text"
-                    placeholder="Title"
-                    className="w-full border p-2 rounded"
-                    value={form.title}
-                    onChange={(e) => setForm({ ...form, title: e.target.value })}
-                />
-                <input
-                    type="text"
-                    placeholder="Rate"
-                    className="w-full border p-2 rounded"
-                    value={form.rate}
-                    onChange={(e) => setForm({ ...form, rate: e.target.value })}
-                />
-                <button
-                    onClick={saveVacancy}
-                    disabled={loading || !form.title || !form.rate}
-                    className={`px-4 py-2 rounded text-white ${loading ? "bg-gray-400" : "bg-blue-600"
-                    }`}
-                >
-                    {loading
-                        ? "Saving..."
-                        : form.id
-                            ? "Update Vacancy"
-                            : "Create Vacancy"}
+        <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+            {/* Кнопка "Назад" */}
+            <div className="flex justify-start mb-4">
+                <button onClick={() => router.back()}>
+                    <BiArrowBack size={25}
+                                 className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
                 </button>
             </div>
-            <ul className="divide-y border rounded">
-                {vacancies.length > 0 ? (
-                    vacancies.map((v) => (
-                        <li key={v.id} className="p-3 flex justify-between items-center">
-                            <div>
-                                <p className="font-medium">{v.title}</p>
-                                <p className="text-sm text-gray-500">Rate: {v.rate}</p>
-                            </div>
-                            <div className="space-x-2">
-                                <button
-                                    className="px-3 py-1 bg-yellow-500 text-white rounded"
-                                    onClick={() => setForm({ id: v.id, title: v.title, rate: v.rate })}
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    className="px-3 py-1 bg-red-600 text-white rounded"
-                                    onClick={() => deleteVacancy(v.id)}
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        </li>
-                    ))
-                ) : (
-                    <li className="p-3 text-center text-gray-500">
-                        No vacancies found.
-                    </li>
-                )}
-            </ul>
+
+            <div className="flex flex-col items-center">
+                <div className="p-6 max-w-2xl w-full mx-auto bg-white rounded-2xl shadow-xl">
+                    <h1 className="text-2xl font-bold mb-4">Manage Vacancies</h1>
+                    <div className="space-y-2 mb-6">
+                        <input
+                            type="text"
+                            placeholder="Title"
+                            className="w-full border p-2 rounded"
+                            value={form.title}
+                            onChange={(e) => setForm({ ...form, title: e.target.value })}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Rate"
+                            className="w-full border p-2 rounded"
+                            value={form.rate}
+                            onChange={(e) => setForm({ ...form, rate: e.target.value })}
+                        />
+                        <button
+                            onClick={saveVacancy}
+                            disabled={loading || !form.title || !form.rate}
+                            className={`px-4 py-2 rounded text-white ${loading ? "bg-gray-400" : "bg-blue-600"
+                            }`}
+                        >
+                            {loading
+                                ? "Saving..."
+                                : form.id
+                                    ? "Update Vacancy"
+                                    : "Create Vacancy"}
+                        </button>
+                    </div>
+                    <ul className="divide-y border rounded">
+                        {vacancies.length > 0 ? (
+                            vacancies.map((v) => (
+                                <li key={v.id} className="p-3 flex justify-between items-center">
+                                    <div>
+                                        <p className="font-medium">{v.title}</p>
+                                        <p className="text-sm text-gray-500">Rate: {v.rate}</p>
+                                    </div>
+                                    <div className="space-x-2">
+                                        <button
+                                            className="px-3 py-1 bg-yellow-500 text-white rounded"
+                                            onClick={() => setForm({ id: v.id, title: v.title, rate: v.rate })}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="px-3 py-1 bg-red-600 text-white rounded"
+                                            onClick={() => deleteVacancy(v.id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </li>
+                            ))
+                        ) : (
+                            <li className="p-3 text-center text-gray-500">
+                                No vacancies found.
+                            </li>
+                        )}
+                    </ul>
+                </div>
+            </div>
         </div>
     );
 }
