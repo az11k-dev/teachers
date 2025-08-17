@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="5396cf71-fd3c-4a26-9c53-32726d463399" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/[schoolId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/[schoolId]/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/[regionId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[regionId]/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/admin/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/admin/vacancies/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/vacancies/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/apply/[vacancyId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/apply/[vacancyId]/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +56,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_interpreter_path&quot;: &quot;/home/az11k/.nvm/versions/node/v22.14.0/bin/node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/opt/WebStorm-243.26053.12/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -85,6 +81,8 @@
       <workItem from="1755145659115" duration="5194000" />
       <workItem from="1755179085846" duration="8334000" />
       <workItem from="1755191377857" duration="2110000" />
+      <workItem from="1755339086907" duration="81000" />
+      <workItem from="1755427506136" duration="300000" />
     </task>
     <servers />
   </component>
