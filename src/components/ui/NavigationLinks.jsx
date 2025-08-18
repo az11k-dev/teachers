@@ -8,7 +8,7 @@ export default function NavigationLinks() {
     ];
 
     return (
-        <nav className="flex justify-center gap-6 mb-10">
+        <nav className="flex justify-center gap-4 mb-10 px-10">
             {links.map(({href, label}) => (
                 <Link
                     key={href}
