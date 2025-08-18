@@ -1,5 +1,5 @@
 // app/super-admin/page.js
-import {supabase} from '@/lib/supabase';
+import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import AssignAdminForm from '@/components/AssignAdminForm';
 import AdminList from '@/components/AdminList';
 import {revalidatePath} from 'next/cache';
@@ -8,6 +8,7 @@ import {revalidatePath} from 'next/cache';
 export const dynamic = 'force-dynamic';
 
 async function getAdminsAndUsersAndSchools() {
+    const supabase = createSupabaseBrowserClient();
     const {data: users, error: usersError} = await supabase
         .from('users')
         .select(`

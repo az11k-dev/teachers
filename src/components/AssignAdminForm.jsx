@@ -1,14 +1,17 @@
 // components/AssignAdminForm.js
 'use client';
 
-import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import {useState} from 'react';
+import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 
-export default function AssignAdminForm({ users, schools, onAdminAssigned }) {
+;
+
+export default function AssignAdminForm({users, schools, onAdminAssigned}) {
     const [selectedUser, setSelectedUser] = useState('');
     const [selectedSchool, setSelectedSchool] = useState('');
     const [message, setMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const supabase = createSupabaseBrowserClient()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,9 +24,9 @@ export default function AssignAdminForm({ users, schools, onAdminAssigned }) {
             return;
         }
 
-        const { error: insertError } = await supabase
+        const {error: insertError} = await supabase
             .from('school_admins')
-            .insert([{ user_id: selectedUser, school_id: selectedSchool }]);
+            .insert([{user_id: selectedUser, school_id: selectedSchool}]);
 
         if (insertError) {
             if (insertError.code === '23505') {
@@ -35,9 +38,9 @@ export default function AssignAdminForm({ users, schools, onAdminAssigned }) {
             return;
         }
 
-        const { error: updateError } = await supabase
+        const {error: updateError} = await supabase
             .from('users')
-            .update({ role: 'admin' })
+            .update({role: 'admin'})
             .eq('id', selectedUser);
 
         if (updateError) {
@@ -69,7 +72,7 @@ export default function AssignAdminForm({ users, schools, onAdminAssigned }) {
                     id="user-select"
                     value={selectedUser}
                     onChange={(e) => setSelectedUser(e.target.value)}
-                    className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
                     required
                 >
                     <option value="" disabled>Foydalanuvchi tanlang</option>
@@ -88,7 +91,7 @@ export default function AssignAdminForm({ users, schools, onAdminAssigned }) {
                     id="school-select"
                     value={selectedSchool}
                     onChange={(e) => setSelectedSchool(e.target.value)}
-                    className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
                     required
                 >
                     <option value="" disabled>Maktab tanlang</option>
