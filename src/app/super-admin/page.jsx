@@ -1,15 +1,13 @@
-// app/super-admin/page.js
-import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import AssignAdminForm from '@/components/AssignAdminForm';
 import AdminList from '@/components/AdminList';
-import {revalidatePath} from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import Link from "next/link";
-import {BiArrowBack} from "react-icons/bi";
+import { BiArrowBack } from "react-icons/bi";
 
 async function getAdminsAndUsersAndSchools() {
     const supabase = createSupabaseBrowserClient();
-    // ... avvalgi kod o'zgarishsiz qoladi
-    const {data: users, error: usersError} = await supabase
+    const { data: users, error: usersError } = await supabase
         .from('users')
         .select(`
             id, 
@@ -21,16 +19,16 @@ async function getAdminsAndUsersAndSchools() {
 
     if (usersError) {
         console.error('Foydalanuvchilarni olishda xato:', usersError);
-        return {users: [], schools: [], admins: []};
+        return { users: [], schools: [], admins: [] };
     }
 
-    const {data: schools, error: schoolsError} = await supabase
+    const { data: schools, error: schoolsError } = await supabase
         .from('schools')
         .select('id, name');
 
     if (schoolsError) {
         console.error('Maktablarni olishda xato:', schoolsError);
-        return {users: [], schools: [], admins: []};
+        return { users: [], schools: [], admins: [] };
     }
 
     const allAdmins = users.filter(user => user.role === 'admin');
@@ -56,26 +54,27 @@ export async function removeAdminAction() {
 }
 
 export default async function SuperAdminPage() {
-    const {users, schools, admins} = await getAdminsAndUsersAndSchools();
+    const { users, schools, admins } = await getAdminsAndUsersAndSchools();
 
     return (
-        <div className="container mx-auto p-4">
-            <div className="flex justify-start w-full max-w-xl mb-4">
-                <Link href={`/`}>
-                    <BiArrowBack size={25}
-                                 className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
-                </Link>
-            </div>
-            <h1 className="text-3xl font-bold mb-6">Super Admin Paneli</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <h2 className="text-2xl font-semibold mb-4">Admin tayinlash</h2>
-                    <AssignAdminForm users={users} schools={schools}/>
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4 sm:p-6 lg:p-8 font-sans">
+            <div className="w-full max-w-5xl">
+                <div className="flex justify-start mb-6">
+                    <Link href="/">
+                        <BiArrowBack size={25}
+                                     className="text-gray-600 hover:text-indigo-600 transition-colors duration-200" />
+                    </Link>
                 </div>
-                <div>
-                    <h2 className="text-2xl font-semibold mb-4">Hozirgi Adminlar</h2>
-                    {/* Yangi propni qo'shamiz */}
-                    <AdminList admins={admins} onAdminRemoved={removeAdminAction}/>
+                <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-10">Super Admin Paneli</h1>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                    <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-6">Admin tayinlash</h2>
+                        <AssignAdminForm users={users} schools={schools} />
+                    </div>
+                    <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-6">Hozirgi Adminlar</h2>
+                        <AdminList admins={admins} onAdminRemoved={removeAdminAction} />
+                    </div>
                 </div>
             </div>
         </div>
