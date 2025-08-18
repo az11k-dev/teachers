@@ -5,7 +5,8 @@ import EmptyState from "@/components/ui/EmptyState";
 import NavigationLinks from "@/components/ui/NavigationLinks";
 import {getRegions} from "@/lib/data/regions";
 import DistrictList from "@/components/ui/DistrictList";
-import {redirect} from "next/navigation"; // DistrictList import qilindi
+import {redirect} from "next/navigation";
+import RedirectOnNewSession from "@/components/RedirectOnNewSession"; // DistrictList import qilindi
 
 // RegionList komponentini o'zgartiramiz: u endi ma'lumotni o'zi yuklamaydi,
 // balki prop orqali qabul qiladi. Bu qayta so'rov yuborishning oldini oladi.
@@ -43,11 +44,9 @@ export default async function HomePage() {
     // 2. Hududlar sonini tekshiramiz
     const isSingleRegion = regions && regions.length === 1;
 
-    redirect("/register");
-
-
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
+            <RedirectOnNewSession/>
             <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
                 <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-center tracking-tight">
                     {/* Sarlavhani shartga qarab o'zgartiramiz */}
