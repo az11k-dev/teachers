@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5396cf71-fd3c-4a26-9c53-32726d463399" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/ui/DistrictList.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/[regionId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[regionId]/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +18,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JSX File" />
         <option value="JavaScript File" />
+        <option value="JSX File" />
       </list>
     </option>
   </component>
@@ -82,7 +83,8 @@
       <workItem from="1755179085846" duration="8334000" />
       <workItem from="1755191377857" duration="2110000" />
       <workItem from="1755339086907" duration="81000" />
-      <workItem from="1755427506136" duration="300000" />
+      <workItem from="1755427506136" duration="937000" />
+      <workItem from="1755521146712" duration="305000" />
     </task>
     <servers />
   </component>
