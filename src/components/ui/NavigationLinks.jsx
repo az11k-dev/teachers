@@ -2,13 +2,13 @@ import Link from "next/link";
 
 export default function NavigationLinks() {
     const links = [
-        {href: "/register", label: "Register"},
+        {href: "/super-admin", label: "Super"},
         {href: "/admin", label: "Admin"},
         {href: "/admin/vacancies", label: "Vacancy"},
     ];
 
     return (
-        <nav className="flex justify-center gap-4 mb-10 px-10">
+        <nav className="flex justify-center gap-3 mb-10 px-10">
             {links.map(({href, label}) => (
                 <Link
                     key={href}
