@@ -5,8 +5,7 @@ import EmptyState from "@/components/ui/EmptyState";
 import NavigationLinks from "@/components/ui/NavigationLinks";
 import {getRegions} from "@/lib/data/regions";
 import DistrictList from "@/components/ui/DistrictList";
-import {useEffect} from "react";
-import {router} from "next/client"; // DistrictList import qilindi
+import {redirect} from "next/navigation"; // DistrictList import qilindi
 
 // RegionList komponentini o'zgartiramiz: u endi ma'lumotni o'zi yuklamaydi,
 // balki prop orqali qabul qiladi. Bu qayta so'rov yuborishning oldini oladi.
@@ -44,11 +43,7 @@ export default async function HomePage() {
     // 2. Hududlar sonini tekshiramiz
     const isSingleRegion = regions && regions.length === 1;
 
-    useEffect(() => {
-        return () => {
-            router.push("/register")
-        };
-    }, []);
+    redirect("/register");
 
 
     return (
