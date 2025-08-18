@@ -3,6 +3,8 @@ import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import AssignAdminForm from '@/components/AssignAdminForm';
 import AdminList from '@/components/AdminList';
 import {revalidatePath} from 'next/cache';
+import Link from "next/link";
+import {BiArrowBack} from "react-icons/bi";
 
 // Bu qator Next.js ga sahifani statik keshlamaslikni aytadi
 export const dynamic = 'force-dynamic';
@@ -61,16 +63,24 @@ export default async function SuperAdminPage() {
     const {users, schools, admins} = await getAdminsAndUsersAndSchools();
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-6">Super Admin Paneli</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <h2 className="text-2xl font-semibold mb-4">Admin tayinlash</h2>
-                    <AssignAdminForm users={users} schools={schools} onAdminAssigned={revalidateSuperAdminPage}/>
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4 sm:p-6 lg:p-8 font-sans">
+            <div className="w-full max-w-5xl">
+                <div className="flex justify-start mb-6">
+                    <Link href="/">
+                        <BiArrowBack size={25}
+                                     className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
+                    </Link>
                 </div>
-                <div>
-                    <h2 className="text-2xl font-semibold mb-4">Hozirgi Adminlar</h2>
-                    <AdminList admins={admins} onAdminRemoved={revalidateSuperAdminPage}/>
+                <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-10">Super Admin Paneli</h1>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                    <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-6">Admin tayinlash</h2>
+                        <AssignAdminForm users={users} schools={schools} onAdminAssigned={revalidateSuperAdminPage}/>
+                    </div>
+                    <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-6">Hozirgi Adminlar</h2>
+                        <AdminList admins={admins} onAdminRemoved={revalidateSuperAdminPage}/>
+                    </div>
                 </div>
             </div>
         </div>

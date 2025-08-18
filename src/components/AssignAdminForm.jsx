@@ -1,12 +1,9 @@
-// components/AssignAdminForm.js
 'use client';
 
-import {useState} from 'react';
-import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
+import { useState } from 'react';
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 
-;
-
-export default function AssignAdminForm({users, schools, onAdminAssigned}) {
+export default function AssignAdminForm({ users, schools, onAdminAssigned }) {
     const [selectedUser, setSelectedUser] = useState('');
     const [selectedSchool, setSelectedSchool] = useState('');
     const [message, setMessage] = useState('');
@@ -24,9 +21,9 @@ export default function AssignAdminForm({users, schools, onAdminAssigned}) {
             return;
         }
 
-        const {error: insertError} = await supabase
+        const { error: insertError } = await supabase
             .from('school_admins')
-            .insert([{user_id: selectedUser, school_id: selectedSchool}]);
+            .insert([{ user_id: selectedUser, school_id: selectedSchool }]);
 
         if (insertError) {
             if (insertError.code === '23505') {
@@ -38,9 +35,9 @@ export default function AssignAdminForm({users, schools, onAdminAssigned}) {
             return;
         }
 
-        const {error: updateError} = await supabase
+        const { error: updateError } = await supabase
             .from('users')
-            .update({role: 'admin'})
+            .update({ role: 'admin' })
             .eq('id', selectedUser);
 
         if (updateError) {
@@ -55,24 +52,22 @@ export default function AssignAdminForm({users, schools, onAdminAssigned}) {
         setSelectedSchool('');
         setIsLoading(false);
 
-        // Yangilanish uchun parent komponentni chaqiramiz
         if (onAdminAssigned) {
             onAdminAssigned();
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto">
-            {/* Avvalgi forma kodi o'zgarishsiz qoladi */}
-            <div className="mb-4">
-                <label htmlFor="user-select" className="block text-gray-700 text-sm font-bold mb-2">
+        <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+                <label htmlFor="user-select" className="block text-gray-700 text-sm font-medium mb-2">
                     Foydalanuvchini tanlang:
                 </label>
                 <select
                     id="user-select"
                     value={selectedUser}
                     onChange={(e) => setSelectedUser(e.target.value)}
-                    className="shadow border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
+                    className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 text-gray-900 focus:ring-blue-500 focus:border-blue-500 transition-all cursor-pointer"
                     required
                 >
                     <option value="" disabled>Foydalanuvchi tanlang</option>
@@ -83,15 +78,15 @@ export default function AssignAdminForm({users, schools, onAdminAssigned}) {
                     ))}
                 </select>
             </div>
-            <div className="mb-6">
-                <label htmlFor="school-select" className="block text-gray-700 text-sm font-bold mb-2">
+            <div>
+                <label htmlFor="school-select" className="block text-gray-700 text-sm font-medium mb-2">
                     Maktabni tanlang:
                 </label>
                 <select
                     id="school-select"
                     value={selectedSchool}
                     onChange={(e) => setSelectedSchool(e.target.value)}
-                    className="shadow border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
+                    className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 text-gray-900 focus:ring-blue-500 focus:border-blue-500 transition-all cursor-pointer"
                     required
                 >
                     <option value="" disabled>Maktab tanlang</option>
@@ -104,13 +99,13 @@ export default function AssignAdminForm({users, schools, onAdminAssigned}) {
             </div>
             <button
                 type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-blue-300"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 transform hover:scale-102 disabled:bg-blue-400 disabled:cursor-not-allowed"
                 disabled={isLoading}
             >
                 {isLoading ? 'Yuklanmoqda...' : 'Admin tayinlash'}
             </button>
             {message && (
-                <p className={`mt-4 ${message.includes('muvaffaqiyatli') ? 'text-green-500' : 'text-red-500'}`}>
+                <p className={`mt-4 text-center font-medium ${message.includes('muvaffaqiyatli') ? 'text-green-600' : 'text-red-600'}`}>
                     {message}
                 </p>
             )}
