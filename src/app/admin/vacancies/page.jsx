@@ -171,7 +171,7 @@ export default function VacanciesPage() {
                                 <li key={v.id} className="p-3 flex justify-between items-center">
                                     <div>
                                         <p className="font-medium">{v.title}</p>
-                                        <p className="text-sm text-gray-500">Stavka: {v.rate}</p>
+                                        <p className="text-sm text-gray-900">Stavka: {v.rate}</p>
                                     </div>
                                     <div className="space-x-2">
                                         <button
@@ -190,7 +190,7 @@ export default function VacanciesPage() {
                                 </li>
                             ))
                         ) : (
-                            <li className="p-3 text-center text-gray-500">
+                            <li className="p-3 text-center text-gray-900">
                                 Vakansiyalar topilmadi.
                             </li>
                         )}

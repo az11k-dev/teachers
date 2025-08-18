@@ -168,7 +168,7 @@ export default function ApplyPage({params}) {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="files" className="block text-sm font-medium text-gray-700 mb-1">
-                            Hujjatlarni biriktirish
+                            Hujjatlarni biriktiring(masalan: Diplom nusxasi, CV, sertifikatlar).
                         </label>
                         <input
                             id="files"
@@ -176,12 +176,12 @@ export default function ApplyPage({params}) {
                             type="file"
                             multiple
                             onChange={handleFileChange}
-                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors"
+                            className="block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors"
                         />
                     </div>
                     <div>
                         <label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-1">
-                            Izoh
+                            Qo'shimcha malumot
                         </label>
                         <textarea
                             id="feedback"

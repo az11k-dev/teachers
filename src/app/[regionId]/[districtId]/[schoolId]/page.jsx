@@ -20,7 +20,7 @@ async function VacancyList({schoolId}) {
                     >
                         <div>
                             <h2 className="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">Vakansiya: {vacancy.title}</h2>
-                            <p className="text-gray-500 font-medium">Stavka: {vacancy.rate}</p>
+                            <p className="text-gray-900 font-medium">Stavka: {vacancy.rate}</p>
                         </div>
                         <Link
                             href={`/apply/${vacancy.id}`}
