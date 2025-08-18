@@ -4,6 +4,8 @@ import {useState, useEffect} from 'react';
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import {useRouter} from 'next/navigation';
 import EmptyState from "@/components/ui/EmptyState";
+import Link from "next/link";
+import {BiArrowBack} from "react-icons/bi";
 
 export default function ApplyPage({params}) {
     const {vacancyId} = params;
@@ -145,6 +147,12 @@ export default function ApplyPage({params}) {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
+            <div className="flex justify-start mb-4">
+                <Link href={`/`}>
+                    <BiArrowBack size={25}
+                                 className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
+                </Link>
+            </div>
             <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-xl w-full">
                 <h2 className="text-4xl font-extrabold text-gray-900 mb-2 text-center tracking-tight">
                     Ariza topshirish
@@ -168,7 +176,7 @@ export default function ApplyPage({params}) {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="files" className="block text-sm font-medium text-gray-700 mb-1">
-                            Hujjatlarni biriktiring(masalan: Diplom nusxasi, CV, sertifikatlar).
+                            Hujjatlarni biriktiring (masalan: Diplom nusxasi, CV, sertifikatlar).
                         </label>
                         <input
                             id="files"
@@ -176,6 +184,7 @@ export default function ApplyPage({params}) {
                             type="file"
                             multiple
                             onChange={handleFileChange}
+                            placeholder="Iltimos, qaysi hujjatlarni biriktirganingizni yozing (masalan: Diplom nusxasi, CV, sertifikatlar)."
                             className="block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors"
                         />
                     </div>
@@ -189,7 +198,7 @@ export default function ApplyPage({params}) {
                             rows="4"
                             value={feedback}
                             onChange={(e) => setFeedback(e.target.value)}
-                            className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
+                            className="block text-gray-900 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
                         />
                     </div>
                     <button
