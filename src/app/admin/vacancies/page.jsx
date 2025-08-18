@@ -14,19 +14,16 @@ export default function VacanciesPage() {
     const [form, setForm] = useState({ id: null, title: "", rate: "" });
     const [loading, setLoading] = useState(false);
 
-    // Foydalanuvchi maktab ID'sini yuklash va vakansiyalarni olish
+    // Load user's school ID and fetch vacancies
     useEffect(() => {
         const load = async () => {
-            // Telegram WebApp ma'lumotlari mavjudligini tekshiramiz
             if (typeof window === 'undefined' || !window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
-                console.error("Telegram foydalanuvchisi ma'lumotlari topilmadi.");
+                console.error("Telegram user data not found.");
                 return;
             }
 
-            // WebApp ma'lumotlaridan telegram_id ni olamiz
             const telegram_id = window.Telegram.WebApp.initDataUnsafe.user.id;
 
-            // 'users' jadvalidan telegram_id bo'yicha foydalanuvchini topamiz
             const { data: user, error: userError } = await supabase
                 .from("users")
                 .select("id")
@@ -34,11 +31,10 @@ export default function VacanciesPage() {
                 .single();
 
             if (userError || !user) {
-                console.error("Bu Telegram ID bilan foydalanuvchi topilmadi.", userError);
+                console.error("User with this Telegram ID not found.", userError);
                 return;
             }
 
-            // Topilgan user.id'ni ishlatib, school_admin'ni topamiz
             const { data: admin, error: adminError } = await supabase
                 .from("school_admins")
                 .select("school_id")
@@ -49,13 +45,13 @@ export default function VacanciesPage() {
                 setSchoolId(admin.school_id);
                 fetchVacancies(admin.school_id);
             } else {
-                console.error("Bu foydalanuvchi uchun maktab ma'muri topilmadi.", adminError);
+                console.error("School admin not found for this user.", adminError);
             }
         };
         load();
     }, []);
 
-    // Muayyan maktab uchun vakansiyalarni yuklash
+    // Fetch vacancies for a specific school
     async function fetchVacancies(id) {
         const { data, error } = await supabase
             .from("vacancies")
@@ -64,16 +60,16 @@ export default function VacanciesPage() {
             .order("created_at", { ascending: false });
 
         if (error) {
-            console.error("Vakansiyalarni yuklashda xatolik:", error);
+            console.error("Error fetching vacancies:", error);
             return;
         }
         setVacancies(data || []);
     }
 
-    // Vakansiyani yaratish yoki yangilash
+    // Create or update a vacancy
     async function saveVacancy() {
         if (!schoolId) {
-            console.error("Maktab ID'si mavjud emas.");
+            console.error("School ID is not available.");
             return;
         }
         setLoading(true);
@@ -97,18 +93,18 @@ export default function VacanciesPage() {
         }
 
         if (result.error) {
-            console.error("Vakansiyani saqlashda xatolik:", result.error);
+            console.error("Error saving vacancy:", result.error);
         } else {
-            setForm({ id: null, title: "", rate: "" }); // Formani qayta oʻrnatish
+            setForm({ id: null, title: "", rate: "" });
             fetchVacancies(schoolId);
         }
 
         setLoading(false);
     }
 
-    // Vakansiyani o'chirish
+    // Delete a vacancy
     async function deleteVacancy(id) {
-        if (!confirm("Haqiqatan ham bu vakansiyani o'chirmoqchimisiz?")) {
+        if (!confirm("Are you sure you want to delete this vacancy?")) {
             return;
         }
 
@@ -116,7 +112,7 @@ export default function VacanciesPage() {
         const { error } = await supabase.from("vacancies").delete().eq("id", id);
 
         if (error) {
-            console.error("Vakansiyani o'chirishda xatolik:", error);
+            console.error("Error deleting vacancy:", error);
         } else if (schoolId) {
             fetchVacancies(schoolId);
         }
@@ -125,37 +121,46 @@ export default function VacanciesPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
-            {/* "Orqaga" tugmasi */}
-            <div className="flex justify-start mb-4">
-                <button onClick={() => router.back()}>
-                    <BiArrowBack size={25}
-                                 className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
-                </button>
-            </div>
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans text-gray-800">
+            <div className="flex flex-col w-full max-w-3xl">
+                {/* Back button */}
+                <div className="flex justify-start mb-6">
+                    <button
+                        onClick={() => router.back()}
+                        className="flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-200"
+                    >
+                        <BiArrowBack size={25} />
+                    </button>
+                </div>
 
-            <div className="flex flex-col items-center">
-                <div className="p-6 max-w-2xl w-full mx-auto bg-white rounded-2xl shadow-xl">
-                    <h1 className="text-2xl font-bold mb-4">Vakansiyalarni boshqarish</h1>
-                    <div className="space-y-2 mb-6">
+                <div className="p-6 w-full bg-white rounded-2xl shadow-lg border border-gray-200">
+                    <h1 className="text-3xl font-extrabold text-center mb-6 text-gray-900">
+                        Vakansiyalarni boshqarish
+                    </h1>
+
+                    {/* Vacancy Form */}
+                    <div className="space-y-4 mb-8">
                         <input
                             type="text"
                             placeholder="Lavozim nomi"
-                            className="w-full border p-2 rounded"
+                            className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                             value={form.title}
                             onChange={(e) => setForm({ ...form, title: e.target.value })}
                         />
                         <input
                             type="text"
                             placeholder="Stavka"
-                            className="w-full border p-2 rounded"
+                            className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                             value={form.rate}
                             onChange={(e) => setForm({ ...form, rate: e.target.value })}
                         />
                         <button
                             onClick={saveVacancy}
                             disabled={loading || !form.title || !form.rate}
-                            className={`px-4 py-2 rounded text-white ${loading ? "bg-gray-400" : "bg-blue-600"
+                            className={`w-full py-3 rounded-xl font-semibold text-white transition-all transform hover:scale-102
+                                ${loading || !form.title || !form.rate
+                                ? "bg-gray-400 cursor-not-allowed"
+                                : "bg-blue-600 hover:bg-blue-700 active:scale-98"
                             }`}
                         >
                             {loading
@@ -165,23 +170,25 @@ export default function VacanciesPage() {
                                     : "Vakansiya yaratish"}
                         </button>
                     </div>
-                    <ul className="divide-y border rounded">
+
+                    {/* Vacancies List */}
+                    <ul className="divide-y divide-gray-200 rounded-xl border border-gray-200 shadow-sm">
                         {vacancies.length > 0 ? (
                             vacancies.map((v) => (
-                                <li key={v.id} className="p-3 flex justify-between items-center">
-                                    <div>
-                                        <p className="font-medium">{v.title}</p>
-                                        <p className="text-sm text-gray-900">Stavka: {v.rate}</p>
+                                <li key={v.id} className="p-5 flex flex-col sm:flex-row justify-between items-center transition-colors hover:bg-gray-50">
+                                    <div className="flex-grow mb-2 sm:mb-0">
+                                        <p className="font-bold text-lg text-gray-900">{v.title}</p>
+                                        <p className="text-sm text-gray-500">Stavka: {v.rate}</p>
                                     </div>
-                                    <div className="space-x-2">
+                                    <div className="flex space-x-2">
                                         <button
-                                            className="px-3 py-1 bg-yellow-500 text-white rounded"
+                                            className="px-4 py-2 bg-yellow-500 text-white rounded-lg font-medium transition-all hover:bg-yellow-600 active:scale-95"
                                             onClick={() => setForm({ id: v.id, title: v.title, rate: v.rate })}
                                         >
                                             Tahrirlash
                                         </button>
                                         <button
-                                            className="px-3 py-1 bg-red-600 text-white rounded"
+                                            className="px-4 py-2 bg-red-600 text-white rounded-lg font-medium transition-all hover:bg-red-700 active:scale-95"
                                             onClick={() => deleteVacancy(v.id)}
                                         >
                                             O'chirish
@@ -190,7 +197,7 @@ export default function VacanciesPage() {
                                 </li>
                             ))
                         ) : (
-                            <li className="p-3 text-center text-gray-900">
+                            <li className="p-5 text-center text-gray-500 italic">
                                 Vakansiyalar topilmadi.
                             </li>
                         )}

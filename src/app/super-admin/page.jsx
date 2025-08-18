@@ -3,6 +3,8 @@ import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import AssignAdminForm from '@/components/AssignAdminForm';
 import AdminList from '@/components/AdminList';
 import {revalidatePath} from 'next/cache';
+import Link from "next/link";
+import {BiArrowBack} from "react-icons/bi";
 
 async function getAdminsAndUsersAndSchools() {
     const supabase = createSupabaseBrowserClient();
@@ -58,6 +60,12 @@ export default async function SuperAdminPage() {
 
     return (
         <div className="container mx-auto p-4">
+            <div className="flex justify-start w-full max-w-xl mb-4">
+                <Link href={`/`}>
+                    <BiArrowBack size={25}
+                                 className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
+                </Link>
+            </div>
             <h1 className="text-3xl font-bold mb-6">Super Admin Paneli</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
