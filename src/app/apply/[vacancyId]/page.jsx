@@ -147,7 +147,7 @@ export default function ApplyPage({params}) {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
-            <div className="flex justify-start mb-4">
+            <div className="flex justify-start w-full max-w-xl mb-4">
                 <Link href={`/`}>
                     <BiArrowBack size={25}
                                  className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>

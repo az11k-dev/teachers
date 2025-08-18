@@ -5,7 +5,6 @@ import EmptyState from "@/components/ui/EmptyState";
 import NavigationLinks from "@/components/ui/NavigationLinks";
 import {getRegions} from "@/lib/data/regions";
 import DistrictList from "@/components/ui/DistrictList";
-import {redirect} from "next/navigation";
 import RedirectOnNewSession from "@/components/RedirectOnNewSession"; // DistrictList import qilindi
 
 // RegionList komponentini o'zgartiramiz: u endi ma'lumotni o'zi yuklamaydi,

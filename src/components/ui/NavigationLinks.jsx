@@ -1,20 +1,29 @@
 import Link from "next/link";
 
 export default function NavigationLinks() {
+    const links = [
+        {href: "/register", label: "Register"},
+        {href: "/admin", label: "Admin"},
+        {href: "/admin/vacancies", label: "Vacancy"},
+    ];
+
     return (
-        <div className="flex justify-center space-x-4 mb-6">
-            <Link href="/register"
-                  className="text-indigo-600 hover:text-indigo-800 border-1 border-indigo-600 p-4 hover:border-none">
-                Register
-            </Link>
-            <Link href="/admin"
-                  className="text-indigo-600 hover:text-indigo-800 border-indigo-600 p-4 hover:border-none">
-                Admin
-            </Link>
-            <Link href="/admin/vacancies"
-                  className="text-indigo-600 hover:text-indigo-800 border-indigo-600 p-4 hover:border-none">
-                Vacancy
-            </Link>
-        </div>
+        <nav className="flex justify-center gap-6 mb-10">
+            {links.map(({href, label}) => (
+                <Link
+                    key={href}
+                    href={href}
+                    className="relative px-6 py-3 rounded-2xl font-medium text-indigo-600
+          border border-indigo-300 shadow-md backdrop-blur-sm
+          transition-all duration-300 ease-in-out
+          hover:text-white hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
+          hover:shadow-lg hover:scale-105 group"
+                >
+                    <span className="relative z-10">{label}</span>
+                    <span className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100
+            bg-gradient-to-r from-indigo-500 to-purple-600 transition duration-300"/>
+                </Link>
+            ))}
+        </nav>
     );
 }
