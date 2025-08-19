@@ -44,8 +44,9 @@ export default async function SchoolsPage({params}) {
         <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
             {/* Orqaga qaytish tugmasi */}
             <div className="flex justify-start mb-4">
-                <Link href={`/${regionId}`}>
-                    <BiArrowBack size={25} className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
+                <Link href={`/`}>
+                    <BiArrowBack size={25}
+                                 className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
                 </Link>
             </div>
 

@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="5396cf71-fd3c-4a26-9c53-32726d463399" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/super-admin/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/super-admin/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AssignAdminForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AssignAdminForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/[regionId]/[districtId]/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +95,7 @@
       <workItem from="1755427506136" duration="937000" />
       <workItem from="1755521146712" duration="305000" />
       <workItem from="1755526491917" duration="326000" />
-      <workItem from="1755536712711" duration="6362000" />
+      <workItem from="1755536712711" duration="6563000" />
     </task>
     <servers />
   </component>
