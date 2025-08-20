@@ -4,16 +4,22 @@
     "teachers": {
       "development": {
         "fallback": "teachers-mocha.vercel.app"
+      },
+      "production": {
+        "fallback": "teachers.vercel.app"
       }
     },
     "teachers-micro": {
+      "packageName": "teachers-micro-app",
       "routing": [
         {
           "paths": [
-            "/react/*"
+            "-/react/*",
+            "/micro/"
           ]
         }
-      ]
+      ],
+      "localProxyPort": 3030
     }
   }
 }
