@@ -10,7 +10,7 @@
       }
     },
     "teachers-micro": {
-      "packageName": "teachers-micro-app",
+      "packageName": "teachers-micro",
       "routing": [
         {
           "paths": [
