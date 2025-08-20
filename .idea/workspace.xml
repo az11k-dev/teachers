@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5396cf71-fd3c-4a26-9c53-32726d463399" name="Changes" comment="" />
+    <list default="true" id="5396cf71-fd3c-4a26-9c53-32726d463399" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/app/register/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/register/page.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -93,6 +95,7 @@
       <workItem from="1755536712711" duration="6563000" />
       <workItem from="1755688150639" duration="219000" />
       <workItem from="1755689596306" duration="720000" />
+      <workItem from="1755691983094" duration="140000" />
     </task>
     <servers />
   </component>
