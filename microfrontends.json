@@ -4,6 +4,15 @@
     "teachers": {
       "development": {
         "fallback": "teachers-mocha.vercel.app"
+      },
+      "teachers-micro": {
+        "routing": [
+          {
+            "paths": [
+              "/react/*"
+            ]
+          }
+        ]
       }
     }
   }
