@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/microfrontends.json",
+  "applications": {
+    "teachers": {
+      "development": {
+        "fallback": "teachers-mocha.vercel.app"
+      }
+    }
+  }
+}
