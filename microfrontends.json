@@ -6,7 +6,7 @@
         "fallback": "teachers-mocha.vercel.app"
       },
       "production": {
-        "fallback": "teachers.vercel.app"
+        "fallback": "teachers-mocha.vercel.app"
       }
     },
     "teachers-micro": {
