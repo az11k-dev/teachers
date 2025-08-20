@@ -13,9 +13,7 @@
       "packageName": "teachers-micro",
       "routing": [
         {
-          "paths": [
-            "/react"
-          ]
+          "paths": ["/react", "/react/:path*"]
         }
       ],
       "localProxyPort": 3030
