@@ -14,8 +14,7 @@
       "routing": [
         {
           "paths": [
-            "-/rea/*",
-            "/micro/"
+            "/react"
           ]
         }
       ],
