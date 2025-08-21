@@ -9,17 +9,34 @@ export async function POST(request) {
     }
 
     let message = '';
-    if (status === 'accepted') {
-        message = `Hurmatli foydalanuvchi, sizning arizangiz muvaffaqiyatli tarzda qabul qilindi va ko'rib chiqish uchun mas'ul xodimga yuborildi. Tez orada siz bilan bog'lanamiz.`;
-    } else if (status === 'rejected') {
-        message = `Hurmatli foydalanuvchi, afsuski, sizning arizangiz ko'rib chiqish natijasiga ko'ra rad etildi. Kelajakdagi arizalaringizda omad tilaymiz.`;
+
+    // Statuslarga qarab turli xabarlar tayyorlaymiz
+    switch (status) {
+        case 'interview':
+            message = `Hurmatli foydalanuvchi, sizning **${vacancyTitle}** lavozimiga yuborgan arizangiz ma'qullandi va siz suhbatga taklif qilindingiz. Maktab ma'muriyati tez orada siz bilan bog'lanadi.`;
+            break;
+        case 'accepted':
+            message = `Hurmatli foydalanuvchi, tabriklaymiz! **${vacancyTitle}** lavozimi uchun o'tkazilgan suhbat natijasiga ko'ra, sizning nomzodingiz qabul qilindi.`;
+            break;
+        case 'rejected':
+            message = `Hurmatli foydalanuvchi, afsuski, **${vacancyTitle}** lavozimi uchun o'tkazilgan suhbat natijasiga ko'ra sizning arizangiz rad etildi. Kelajakdagi arizalaringizda omad tilaymiz.`;
+            break;
+        case 'rejected_immediately':
+            message = `Hurmatli foydalanuvchi, afsuski, **${vacancyTitle}** lavozimiga yuborgan arizangiz dastlabki ko'rib chiqish natijasida rad etildi. Kelajakdagi arizalaringizda omad tilaymiz.`;
+            break;
+        default:
+            message = `Arizangizning holati yangilandi. Iltimos, batafsil ma'lumot uchun saytga kiring.`;
     }
 
+    // Agar izoh bo'lsa, xabarga qo'shamiz
     if (comment) {
-        message += `\n\n*Qoʻshimcha maʼlumotlar:*`;
+        message += `\n\n*Administrator izohi:* ${comment}`;
+    }
+
+    // Qo'shimcha ma'lumotlar faqat o'zgartirilgan holatlar uchun bo'lishi kerak, shuning uchun ularni shartli ravishda qo'shamiz.
+    if (status !== 'pending') {
         message += `\n\n**Vakansiya:** ${vacancyTitle}`;
         message += `\n**Administrator:** ${user.first_name} ${user.last_name} (${user.phone_number})`;
-        message += `\n**Administrator izohi:** ${comment}`;
     }
 
     const payload = {

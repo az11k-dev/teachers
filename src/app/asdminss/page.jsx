@@ -5,6 +5,8 @@ import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import {useRouter} from 'next/navigation';
 import {LuFile, LuDownload, LuEye, LuMessageSquare, LuMailOpen} from "react-icons/lu";
 import {BiArrowBack, BiCheck, BiXCircle} from "react-icons/bi";
+// Yangi ikonkalarni import qilamiz
+import {BsCalendarCheck, BsPersonXFill} from "react-icons/bs";
 
 export default function AdminPage() {
     const router = useRouter();
@@ -132,26 +134,34 @@ export default function AdminPage() {
         }
     };
 
+    // Yangi statuslar uchun yangilangan uslublar
     const getStatusStyle = (status) => {
         switch (status) {
             case 'pending':
                 return 'bg-yellow-100 text-yellow-800';
+            case 'interview':
+                return 'bg-blue-100 text-blue-800';
             case 'accepted':
                 return 'bg-green-100 text-green-800';
             case 'rejected':
+            case 'rejected_immediately':
                 return 'bg-red-100 text-red-800';
             default:
                 return 'bg-gray-100 text-gray-800';
         }
     };
 
+    // Yangi statuslar uchun yangilangan ikonalar
     const getStatusIcon = (status) => {
         switch (status) {
             case 'pending':
                 return <LuMailOpen className="inline-block mr-1"/>;
+            case 'interview':
+                return <BsCalendarCheck className="inline-block mr-1"/>;
             case 'accepted':
                 return <BiCheck className="inline-block mr-1"/>;
             case 'rejected':
+            case 'rejected_immediately':
                 return <BiXCircle className="inline-block mr-1"/>;
             default:
                 return null;
@@ -189,7 +199,6 @@ export default function AdminPage() {
     return (
         <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
             <div className="flex justify-start mb-4">
-                {/* Orqaga qaytish uchun router.back() dan foydalanamiz */}
                 <button onClick={() => router.back()}>
                     <BiArrowBack size={25}
                                  className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
@@ -225,29 +234,63 @@ export default function AdminPage() {
                                             <span
                                                 className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusStyle(app.status)}`}>
                                                 {getStatusIcon(app.status)}
-                                                {app.status === 'pending' ? 'Koʻrib chiqilmoqda' : app.status === 'accepted' ? 'Qabul qilingan' : 'Rad etilgan'}
+                                                {app.status === 'pending' ? 'Koʻrib chiqilmoqda' :
+                                                    app.status === 'interview' ? 'Suhbatga taklif qilingan' :
+                                                        app.status === 'accepted' ? 'Qabul qilingan' :
+                                                            app.status === 'rejected' ? 'Rad etilgan' :
+                                                                app.status === 'rejected_immediately' ? 'Darhol rad etilgan' : 'Holat nomaʼlum'}
                                             </span>
                                             <div className="flex space-x-2">
-                                                <button
-                                                    onClick={() => {
-                                                        setSelectedApplication(app);
-                                                        setAction('accepted');
-                                                    }}
-                                                    className="p-2 text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:bg-green-400"
-                                                    disabled={app.status !== 'pending'}
-                                                >
-                                                    <BiCheck size={20}/>
-                                                </button>
-                                                <button
-                                                    onClick={() => {
-                                                        setSelectedApplication(app);
-                                                        setAction('rejected');
-                                                    }}
-                                                    className="p-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:bg-red-400"
-                                                    disabled={app.status !== 'pending'}
-                                                >
-                                                    <BiXCircle size={20}/>
-                                                </button>
+                                                {/* Pending arizalar uchun yangi tugmalar */}
+                                                {app.status === 'pending' && (
+                                                    <>
+                                                        <button
+                                                            onClick={() => {
+                                                                setSelectedApplication(app);
+                                                                setAction('interview');
+                                                            }}
+                                                            className="p-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+                                                            title="Suhbatga taklif qilish"
+                                                        >
+                                                            <BsCalendarCheck size={20}/>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                setSelectedApplication(app);
+                                                                setAction('rejected_immediately');
+                                                            }}
+                                                            className="p-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                                                            title="Darhol rad etish"
+                                                        >
+                                                            <BsPersonXFill size={20}/>
+                                                        </button>
+                                                    </>
+                                                )}
+                                                {/* Suhbat holatidagi arizalar uchun yangi tugmalar */}
+                                                {app.status === 'interview' && (
+                                                    <>
+                                                        <button
+                                                            onClick={() => {
+                                                                setSelectedApplication(app);
+                                                                setAction('accepted');
+                                                            }}
+                                                            className="p-2 text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
+                                                            title="Qabul qilish"
+                                                        >
+                                                            <BiCheck size={20}/>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                setSelectedApplication(app);
+                                                                setAction('rejected');
+                                                            }}
+                                                            className="p-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                                                            title="Rad etish"
+                                                        >
+                                                            <BiXCircle size={20}/>
+                                                        </button>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -294,11 +337,17 @@ export default function AdminPage() {
                         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4">
                             <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md">
                                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                    {action === 'accepted' ? 'Arizani qabul qilish' : 'Arizani rad etish'}
+                                    {action === 'interview' ? 'Suhbatga taklif qilish' :
+                                        action === 'accepted' ? 'Arizani qabul qilish' :
+                                            action === 'rejected' ? 'Arizani rad etish' :
+                                                'Darhol rad etish'}
                                 </h3>
                                 <p className="text-gray-600 mb-6">
                                     Siz **{selectedApplication.vacancies.title}** lavozimi uchun
-                                    arizani {action === 'accepted' ? 'qabul qilishni' : 'rad etishni'} xohlaysizmi?
+                                    arizani {action === 'interview' ? 'suhbatga taklif qilishni' :
+                                    action === 'accepted' ? 'qabul qilishni' :
+                                        action === 'rejected' ? 'rad etishni' :
+                                            'darhol rad etishni'} xohlaysizmi?
                                 </p>
                                 <p className="text-gray-600 mb-4">
                                     Foydalanuvchi uchun izoh qoʻshishingiz mumkin.
@@ -325,7 +374,9 @@ export default function AdminPage() {
                                         onClick={handleStatusChange}
                                         disabled={isLoading}
                                         className={`px-5 py-2 font-semibold text-white rounded-lg transition-colors ${
-                                            action === 'accepted' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
+                                            action === 'interview' ? 'bg-blue-600 hover:bg-blue-700' :
+                                                action === 'accepted' ? 'bg-green-600 hover:bg-green-700' :
+                                                    'bg-red-600 hover:bg-red-700'
                                         } disabled:opacity-50`}
                                     >
                                         {isLoading ? 'Jarayon ketmoqda...' : 'Tasdiqlash'}
