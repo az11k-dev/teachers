@@ -4,6 +4,9 @@
     "teachers": {
       "development": {
         "fallback": "teachers-mocha.vercel.app"
+      },
+      "production": {
+        "fallback": "teachers-mocha.vercel.app"
       }
     },
     "teachers-micro": {
@@ -16,12 +19,7 @@
           ]
         }
       ],
-      "development": {
-        "local": 3001
-      }
+      "localProxyPort": 3030
     }
-  },
-  "options": {
-    "localProxyPort": 3024
   }
 }

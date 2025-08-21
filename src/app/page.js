@@ -7,6 +7,11 @@ import {getRegions} from "@/lib/data/regions";
 import DistrictList from "@/components/ui/DistrictList";
 import RedirectOnNewSession from "@/components/RedirectOnNewSession"; // DistrictList import qilindi
 
+export const metadata = {
+    title: "Home Page",
+    description: "Welcome to Home Page"
+}
+
 // RegionList komponentini o'zgartiramiz: u endi ma'lumotni o'zi yuklamaydi,
 // balki prop orqali qabul qiladi. Bu qayta so'rov yuborishning oldini oladi.
 function RegionList({regions}) {
