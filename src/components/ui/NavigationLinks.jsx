@@ -5,6 +5,7 @@ export default function NavigationLinks() {
         {href: "/super-admin", label: "Super"},
         {href: "/admin", label: "Admin"},
         {href: "/admin/vacancies", label: "Vacancy"},
+        {href: "/super-admin/schools", label: "Schools"},
     ];
 
     return (

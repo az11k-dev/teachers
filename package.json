@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next --port $(microfrontends port)",
-    "proxy": "microfrontends proxy microfrontends.json --local-apps teachers",
+    "proxy": "microfrontends proxy microfrontends.json --local-apps teachers teachers-micro",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
