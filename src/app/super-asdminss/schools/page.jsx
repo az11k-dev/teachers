@@ -2,6 +2,8 @@
 
 import {useState, useEffect} from "react";
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
+import Link from "next/link";
+import {BiArrowBack} from "react-icons/bi";
 
 const supabase = createSupabaseBrowserClient();
 
@@ -125,13 +127,20 @@ export default function Schools() {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4 sm:p-8">
+            <div className="flex justify-start w-full max-w-xl mb-4">
+                <Link href={`/`}>
+                    <BiArrowBack size={25}
+                                 className="text-gray-600 hover:text-indigo-600 transition-colors duration-200"/>
+                </Link>
+            </div>
             <div className="container mx-auto max-w-5xl">
                 <h1 className="text-4xl sm:text-5xl font-extrabold text-center mb-12 text-blue-600 dark:text-blue-400">
                     Maktablar va Tumanlarni Boshqarish
                 </h1>
 
                 {/* Tuman qo'shish */}
-                <section className="mb-10 p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl transition-all duration-300 transform hover:scale-[1.01] hover:shadow-2xl">
+                <section
+                    className="mb-10 p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl transition-all duration-300 transform hover:scale-[1.01] hover:shadow-2xl">
                     <h2 className="text-2xl sm:text-3xl font-bold mb-6 border-b-2 border-blue-200 dark:border-blue-700 pb-2">
                         ➕ Tuman Qo'shish
                     </h2>
@@ -153,7 +162,8 @@ export default function Schools() {
                 </section>
 
                 {/* Tumanlar ro'yxati */}
-                <section className="mb-10 p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl transition-all duration-300 transform hover:scale-[1.01] hover:shadow-2xl">
+                <section
+                    className="mb-10 p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl transition-all duration-300 transform hover:scale-[1.01] hover:shadow-2xl">
                     <h2 className="text-2xl sm:text-3xl font-bold mb-6 border-b-2 border-blue-200 dark:border-blue-700 pb-2">
                         📜 Tumanlar Ro'yxati
                     </h2>
@@ -217,13 +227,15 @@ export default function Schools() {
                                 </li>
                             ))
                         ) : (
-                            <p className="text-center text-gray-500 dark:text-gray-400 italic">Hali tumanlar mavjud emas.</p>
+                            <p className="text-center text-gray-500 dark:text-gray-400 italic">Hali tumanlar mavjud
+                                emas.</p>
                         )}
                     </ul>
                 </section>
 
                 {/* Maktab qo'shish */}
-                <section className="mb-10 p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl transition-all duration-300 transform hover:scale-[1.01] hover:shadow-2xl">
+                <section
+                    className="mb-10 p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl transition-all duration-300 transform hover:scale-[1.01] hover:shadow-2xl">
                     <h2 className="text-2xl sm:text-3xl font-bold mb-6 border-b-2 border-blue-200 dark:border-blue-700 pb-2">
                         🏫 Maktab Qo'shish
                     </h2>
@@ -257,7 +269,8 @@ export default function Schools() {
                 </section>
 
                 {/* Maktablar ro'yxati */}
-                <section className="p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl transition-all duration-300 transform hover:scale-[1.01] hover:shadow-2xl">
+                <section
+                    className="p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl transition-all duration-300 transform hover:scale-[1.01] hover:shadow-2xl">
                     <h2 className="text-2xl sm:text-3xl font-bold mb-6 border-b-2 border-blue-200 dark:border-blue-700 pb-2">
                         📚 Maktablar Ro'yxati
                     </h2>
@@ -310,7 +323,8 @@ export default function Schools() {
                                     ) : (
                                         <>
                                             <span className="text-lg font-medium flex-grow mb-2 sm:mb-0">
-                                                {school.name} <span className="text-gray-500 dark:text-gray-400">({school.districts.name})</span>
+                                                {school.name} <span
+                                                className="text-gray-500 dark:text-gray-400">({school.districts.name})</span>
                                             </span>
                                             <div className="flex gap-2">
                                                 <button
@@ -335,7 +349,8 @@ export default function Schools() {
                                 </li>
                             ))
                         ) : (
-                            <p className="text-center text-gray-500 dark:text-gray-400 italic">Hali maktablar mavjud emas.</p>
+                            <p className="text-center text-gray-500 dark:text-gray-400 italic">Hali maktablar mavjud
+                                emas.</p>
                         )}
                     </ul>
                 </section>

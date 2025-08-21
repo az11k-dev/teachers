@@ -40,7 +40,7 @@ export default function AdminPage() {
 
             const {data: userData, error: userError} = await supabase
                 .from('users')
-                .select('id, role')
+                .select('id, role, first_name, last_name, phone_number')
                 .eq('telegram_id', telegramUser?.id)
                 .single();
             setUser(userData);
