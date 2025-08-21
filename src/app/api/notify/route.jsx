@@ -10,15 +10,16 @@ export async function POST(request) {
 
     let message = '';
     if (status === 'accepted') {
-        message = `Arizangiz qabul qilindi!`;
+        message = `Hurmatli foydalanuvchi, sizning arizangiz muvaffaqiyatli tarzda qabul qilindi va ko'rib chiqish uchun mas'ul xodimga yuborildi. Tez orada siz bilan bog'lanamiz.`;
     } else if (status === 'rejected') {
-        message = `Afsuski, arizangiz rad etildi!`;
+        message = `Hurmatli foydalanuvchi, afsuski, sizning arizangiz ko'rib chiqish natijasiga ko'ra rad etildi. Kelajakdagi arizalaringizda omad tilaymiz.`;
     }
 
     if (comment) {
-        message += `\n\nVakansiya: ${vacancyTitle}`;
-        message += `\n\nAdminstrator: ${user.first_name} ${user.last_name} (${user.phone_confirm})`;
-        message += `\n\nAdministrator izohi: ${comment}`;
+        message += `\n\n*Qoʻshimcha maʼlumotlar:*`;
+        message += `\n\n**Vakansiya:** ${vacancyTitle}`;
+        message += `\n**Administrator:** ${user.first_name} ${user.last_name} (${user.phone_number})`;
+        message += `\n**Administrator izohi:** ${comment}`;
     }
 
     const payload = {
