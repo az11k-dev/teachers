@@ -18,6 +18,7 @@ export default function AdminPage() {
     const [comment, setComment] = useState('');
     const [action, setAction] = useState(null);
     const [error, setError] = useState(null);
+    const [user, setUser] = useState({});
 
     useEffect(() => {
         async function initializeAdminPanel() {
@@ -42,6 +43,7 @@ export default function AdminPage() {
                 .select('id, role')
                 .eq('telegram_id', telegramUser?.id)
                 .single();
+            setUser(userData);
 
             if (userError || userData.role !== 'admin') {
                 setIsAdmin(false);
@@ -115,6 +117,7 @@ export default function AdminPage() {
                     status: action,
                     comment: comment,
                     vacancyTitle: selectedApplication.vacancies.title,
+                    user: user
                 }),
             });
 
@@ -294,7 +297,8 @@ export default function AdminPage() {
                                     {action === 'accepted' ? 'Arizani qabul qilish' : 'Arizani rad etish'}
                                 </h3>
                                 <p className="text-gray-600 mb-6">
-                                    Siz **{selectedApplication.vacancies.title}** lavozimi uchun arizani {action === 'accepted' ? 'qabul qilishni' : 'rad etishni'} xohlaysizmi?
+                                    Siz **{selectedApplication.vacancies.title}** lavozimi uchun
+                                    arizani {action === 'accepted' ? 'qabul qilishni' : 'rad etishni'} xohlaysizmi?
                                 </p>
                                 <p className="text-gray-600 mb-4">
                                     Foydalanuvchi uchun izoh qoʻshishingiz mumkin.

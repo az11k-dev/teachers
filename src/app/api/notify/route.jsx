@@ -1,7 +1,7 @@
 import {NextResponse} from 'next/server';
 
 export async function POST(request) {
-    const {telegramId, status, comment, vacancyTitle} = await request.json();
+    const {telegramId, status, comment, vacancyTitle, user} = await request.json();
     const token = "8289770320:AAF5ewfCHbSIXex7Z4MuufHN8iVAe-OXBtQ";
 
     if (!token) {
@@ -17,6 +17,7 @@ export async function POST(request) {
 
     if (comment) {
         message += `\n\nVakansiya: ${vacancyTitle}`;
+        message += `\n\nAdminstrator: ${user.first_name} ${user.last_name} (${user.phone_confirm})`;
         message += `\n\nAdministrator izohi: ${comment}`;
     }
 
