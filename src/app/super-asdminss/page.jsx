@@ -1,4 +1,4 @@
-// app/super-admin/page.js
+// app/super-asdminss/page.js
 import {createSupabaseBrowserClient} from "@/lib/supabase/browser-client";
 import AssignAdminForm from '@/components/AssignAdminForm';
 import AdminList from '@/components/AdminList';
@@ -56,7 +56,7 @@ async function getAdminsAndUsersAndSchools() {
 // Server action
 export async function revalidateSuperAdminPage() {
     'use server';
-    revalidatePath('/super-admin');
+    revalidatePath('/super-asdminss');
 }
 
 export default async function SuperAdminPage() {

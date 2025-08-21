@@ -124,7 +124,7 @@ export default function ApplyPage({params}) {
             });
 
             if (!notificationRes.ok) {
-                console.error('Error sending admin notification:', await notificationRes.text());
+                console.error('Error sending asdminss notification:', await notificationRes.text());
             }
 
             alert('Sizning arizangiz muvaffaqiyatli yuborildi!');

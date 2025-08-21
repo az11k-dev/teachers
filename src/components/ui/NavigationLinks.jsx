@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export default function NavigationLinks() {
     const links = [
-        {href: "/super-admin", label: "Super"},
-        {href: "/admin", label: "Admin"},
-        {href: "/admin/vacancies", label: "Vacancy"},
-        {href: "/super-admin/schools", label: "Schools"},
+        {href: "/super-asdminss", label: "Super"},
+        {href: "/asdminss", label: "Admin"},
+        {href: "/asdminss/vacancies", label: "Vacancy"},
+        {href: "/super-asdminss/schools", label: "Schools"},
     ];
 
     return (

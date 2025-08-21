@@ -45,7 +45,7 @@ export default function VacanciesPage() {
                 setSchoolId(admin.school_id);
                 fetchVacancies(admin.school_id);
             } else {
-                console.error("School admin not found for this user.", adminError);
+                console.error("School asdminss not found for this user.", adminError);
             }
         };
         load();

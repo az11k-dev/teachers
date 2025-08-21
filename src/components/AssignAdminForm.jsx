@@ -27,7 +27,7 @@ export default function AssignAdminForm({ users, schools, onAdminAssigned }) {
 
         if (insertError) {
             if (insertError.code === '23505') {
-                setMessage('Bu foydalanuvchi allaqachon bu maktab uchun admin qilib tayinlangan.');
+                setMessage('Bu foydalanuvchi allaqachon bu maktab uchun asdminss qilib tayinlangan.');
             } else {
                 setMessage('Admin tayinlashda xato yuz berdi: ' + insertError.message);
             }
